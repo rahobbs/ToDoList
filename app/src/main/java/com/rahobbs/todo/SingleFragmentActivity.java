@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 
 /**
  * Created by rachael on 2/2/16.
+ * Defines an abstract activity to host a single fragment
  */
 public abstract class SingleFragmentActivity extends FragmentActivity {
 

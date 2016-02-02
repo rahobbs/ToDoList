@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 /**
  * Created by rachael on 2/1/16.
+ * Fragment that contains a single to-do item detailed view
  */
 public class TodoFragment extends Fragment {
 
