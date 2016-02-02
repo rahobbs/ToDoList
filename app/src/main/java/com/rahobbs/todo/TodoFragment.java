@@ -33,7 +33,7 @@ public class TodoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_todo, container, false);
-        mTitle = (EditText)v.findViewById(R.id.crime_title);
+        mTitle = (EditText)v.findViewById(R.id.todo_title);
         mTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
