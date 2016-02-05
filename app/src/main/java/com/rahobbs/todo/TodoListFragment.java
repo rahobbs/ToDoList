@@ -77,7 +77,7 @@ public class TodoListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = TodoActivity.newIntent(getActivity(), mTodo.getID());
+            Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
             startActivity(intent);
         }
     }
