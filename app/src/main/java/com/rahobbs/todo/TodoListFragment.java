@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -72,6 +73,12 @@ public class TodoListFragment extends Fragment {
             mTodo = todo;
             mTitleTextView.setText(mTodo.getTitle());
             mDateTextView.setText(mTodo.getDate().toString());
+            mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mTodo.setCompleted(isChecked);
+                }
+            });
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
         }
 
