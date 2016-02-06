@@ -24,13 +24,10 @@ public class TodoLab {
 
     private TodoLab(Context context) {
         mTodoItems = new ArrayList<>();
-        //Create dummy items
-        for (int i = 0; i < 50; i++) {
-            TodoItem todo = new TodoItem();
-            todo.setTitle("Todo # " + i);
-            Log.d("things", "Constructed creating Item " + todo.getID());
-            mTodoItems.add(todo);
-        }
+    }
+
+    public void addTodoItem(TodoItem item){
+        mTodoItems.add(item);
     }
 
     public List<TodoItem> getItems() {
