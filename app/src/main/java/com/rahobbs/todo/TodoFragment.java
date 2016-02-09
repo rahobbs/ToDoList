@@ -60,6 +60,13 @@ public class TodoFragment extends Fragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+
+        TodoLab.get(getActivity()).updateItem(mTodo);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_todo, container, false);

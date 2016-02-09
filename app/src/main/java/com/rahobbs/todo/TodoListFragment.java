@@ -52,6 +52,7 @@ public class TodoListFragment extends Fragment {
             mAdapter = new TodoAdapter(todoItems);
             mTodoRecycleView.setAdapter(mAdapter);
         } else {
+            mAdapter.setTodoItems(todoItems);
             mAdapter.notifyDataSetChanged();
         }
 
@@ -142,6 +143,10 @@ public class TodoListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mTodoItems.size();
+        }
+
+        public void setTodoItems(List<TodoItem> todoItems){
+            mTodoItems = todoItems;
         }
     }
 

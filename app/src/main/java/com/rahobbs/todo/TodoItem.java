@@ -16,7 +16,11 @@ public class TodoItem {
     public TodoItem(){
         mID = UUID.randomUUID();
         mDate = new Date();
-        completed = false;
+    }
+
+    public TodoItem(UUID id){
+        mID = id;
+        mDate = new Date();
     }
 
     public boolean isCompleted() {
