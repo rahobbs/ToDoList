@@ -2,6 +2,7 @@ package com.rahobbs.todo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,17 @@ public class TodoListFragment extends Fragment {
 
         mTodoRecycleView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         mTodoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        FloatingActionButton addFab = (FloatingActionButton) view.findViewById(R.id.add_fab);
+
+        addFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TodoItem todoItem = new TodoItem();
+                TodoLab.get(getActivity()).addTodoItem(todoItem);
+                Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
+                startActivity(intent);
+            }
+        });
 
         updateUI();
         return view;
@@ -64,6 +76,9 @@ public class TodoListFragment extends Fragment {
         updateUI();
     }
 
+
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
@@ -73,12 +88,12 @@ public class TodoListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.menu_item_new_todo:
+/*            case R.id.menu_item_new_todo:
                 TodoItem todoItem = new TodoItem();
                 TodoLab.get(getActivity()).addTodoItem(todoItem);
                 Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
                 startActivity(intent);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
