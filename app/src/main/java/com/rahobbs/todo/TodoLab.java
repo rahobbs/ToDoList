@@ -42,6 +42,12 @@ public class TodoLab {
         mDatabase.insert(TodoTable.NAME, null, values);
     }
 
+    public void deleteTodoItem(UUID todoId){
+        String uuidString = todoId.toString();
+
+        mDatabase.delete(TodoTable.NAME, TodoTable.Cols.UUID + " = ?", new String[] {uuidString});
+    }
+
     public List<TodoItem> getItems() {
         List<TodoItem> todoItems = new ArrayList<>();
 

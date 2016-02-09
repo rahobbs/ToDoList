@@ -5,8 +5,6 @@
     <string name="todo_date_label">Due Date</string>
     <string name="todo_completed_label">Completed</string>
     <string name="date_picker_title">Due date</string>
-    <string name="new_todo">New Item</string>
-    <string name="show_subtitle">Show Subtitle</string>
-    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="delete_todo">Delete Item</string>
     <string name="subtitle_format">%1$s items</string>
 </resources>
