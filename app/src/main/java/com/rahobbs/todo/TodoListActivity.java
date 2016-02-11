@@ -12,4 +12,5 @@ public class TodoListActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return new TodoListFragment();
     }
+
 }

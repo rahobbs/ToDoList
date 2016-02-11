@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class TodoListFragment extends Fragment {
     private TodoAdapter mAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -78,17 +77,15 @@ public class TodoListFragment extends Fragment {
     }
 
 
-
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_todo_list, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 /*            case R.id.menu_item_new_todo:
                 TodoItem todoItem = new TodoItem();
                 TodoLab.get(getActivity()).addTodoItem(todoItem);
@@ -113,6 +110,8 @@ public class TodoListFragment extends Fragment {
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_todo_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_todo_completed_check_box);
+
+
         }
 
         public void bindTodo(TodoItem todo) {
@@ -120,6 +119,20 @@ public class TodoListFragment extends Fragment {
             mTitleTextView.setText(mTodo.getTitle());
             mDateTextView.setText(mTodo.getDate().toString());
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
+            mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    boolean boxChecked = mTodo.isCompleted();
+
+                    if (boxChecked) {
+                        mTodo.setCompleted(false);
+                    } else {
+                        mTodo.setCompleted(true);
+                    }
+                    TodoLab.get(getActivity()).updateItem(mTodo);
+
+                }
+            });
         }
 
         @Override
@@ -127,6 +140,7 @@ public class TodoListFragment extends Fragment {
             Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
             startActivity(intent);
         }
+
     }
 
     private class TodoAdapter extends RecyclerView.Adapter<TodoHolder> {
@@ -140,6 +154,7 @@ public class TodoListFragment extends Fragment {
         public TodoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item_todo, parent, false);
+
 
             return new TodoHolder(view);
         }
@@ -155,7 +170,7 @@ public class TodoListFragment extends Fragment {
             return mTodoItems.size();
         }
 
-        public void setTodoItems(List<TodoItem> todoItems){
+        public void setTodoItems(List<TodoItem> todoItems) {
             mTodoItems = todoItems;
         }
     }
