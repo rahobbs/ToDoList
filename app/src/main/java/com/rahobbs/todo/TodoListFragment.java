@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -86,12 +87,17 @@ public class TodoListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-/*            case R.id.menu_item_new_todo:
-                TodoItem todoItem = new TodoItem();
-                TodoLab.get(getActivity()).addTodoItem(todoItem);
-                Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
-                startActivity(intent);
-                return true;*/
+            case R.id.menu_item_send_feedback:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"dev.rahobbs@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "Todo List Customer Feedback");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
