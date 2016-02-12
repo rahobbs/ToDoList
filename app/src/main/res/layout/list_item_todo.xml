@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_todo_completed_check_box"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:padding="4dp"
         tools:text="Title"/>
 
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_todo_completed_check_box"
         android:layout_below="@id/list_item_todo_title_text_view"
+        android:textSize="12sp"
         android:padding="4dp"
         tools:text="Due date"/>
 

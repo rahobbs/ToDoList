@@ -17,7 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by rachael on 2/2/16.
@@ -90,7 +92,7 @@ public class TodoListFragment extends Fragment {
             case R.id.menu_item_send_feedback:
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"dev.rahobbs@gmail.com"});
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"dev.rahobbs@gmail.com"});
                 i.putExtra(Intent.EXTRA_SUBJECT, "Todo List Customer Feedback");
                 try {
                     startActivity(Intent.createChooser(i, "Send mail..."));
@@ -121,9 +123,10 @@ public class TodoListFragment extends Fragment {
         }
 
         public void bindTodo(TodoItem todo) {
+            SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
             mTodo = todo;
             mTitleTextView.setText(mTodo.getTitle());
-            mDateTextView.setText(mTodo.getDate().toString());
+            mDateTextView.setText(format.format(mTodo.getDate()));
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

@@ -19,7 +19,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -150,6 +152,7 @@ public class TodoFragment extends Fragment {
     }
 
     private void updateDate() {
-        mDueDateButton.setText(mTodo.getDate().toString());
+        SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
+        mDueDateButton.setText(format.format(mTodo.getDate()));
     }
 }
