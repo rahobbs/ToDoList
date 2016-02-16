@@ -89,6 +89,12 @@ public class TodoFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
+        if(mTodo.getTitle() == null){
+            UUID crimeId = mTodo.getID();
+            TodoLab.get(getActivity()).deleteTodoItem(crimeId);
+            getActivity().finish();
+        }
+
         TodoLab.get(getActivity()).updateItem(mTodo);
     }
 
