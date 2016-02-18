@@ -78,7 +78,18 @@ public class TodoFragment extends Fragment {
             case R.id.menu_item_delete_todo:
                 UUID crimeId = mTodo.getID();
                 TodoLab.get(getActivity()).deleteTodoItem(crimeId);
-                Toast.makeText(getActivity(), mTodo.getTitle() + " deleted", Toast.LENGTH_SHORT).show();
+
+                String titleToDisplay;
+
+                if(mTodo.getTitle().length() > 25){
+                    titleToDisplay = mTodo.getTitle().substring(0, 25);
+                } else {
+                    titleToDisplay = mTodo.getTitle();
+                }
+
+                Toast.makeText(getActivity(),
+                        "\"" + titleToDisplay + "\" deleted",
+                        Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             default:
                 return super.onOptionsItemSelected(item);
