@@ -3,8 +3,10 @@ package com.rahobbs.todo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -99,7 +101,10 @@ public class TodoFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        saveNewItem();
+    }
 
+    private void saveNewItem() {
         if(mTodo.getTitle() == null){
             UUID crimeId = mTodo.getID();
             TodoLab.get(getActivity()).deleteTodoItem(crimeId);
@@ -150,6 +155,16 @@ public class TodoFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTodo.setCompleted(isChecked);
+            }
+        });
+
+        FloatingActionButton saveFab = (FloatingActionButton) v.findViewById(R.id.save_fab);
+
+        saveFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveNewItem();
+                getActivity().finish();
             }
         });
 
