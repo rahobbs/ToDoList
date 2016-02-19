@@ -1,6 +1,7 @@
 package com.rahobbs.todo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -126,7 +127,17 @@ public class TodoListFragment extends Fragment {
             SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
             mTodo = todo;
             mTitleTextView.setText(mTodo.getTitle());
+
+            if(mTodo.isCompleted()){
+                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+            }
+
             mDateTextView.setText(format.format(mTodo.getDate()));
+
+            if(mTodo.isCompleted()){
+                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+            }
+
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -135,8 +146,10 @@ public class TodoListFragment extends Fragment {
 
                     if (boxChecked) {
                         mTodo.setCompleted(false);
+                        mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
                     } else {
                         mTodo.setCompleted(true);
+                        mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
                     }
                     TodoLab.get(getActivity()).updateItem(mTodo);
 
