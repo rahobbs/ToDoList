@@ -94,9 +94,9 @@ public class TodoFragment extends Fragment {
                 if (mTodo.getTitle() == null) {
                     titleToDisplay = "Unnamed task";
                 } else if (mTodo.getTitle().length() > 25) {
-                    titleToDisplay = mTodo.getTitle().substring(0, 25);
+                    titleToDisplay = mTodo.getTitle().trim().substring(0, 25);
                 } else {
-                    titleToDisplay = mTodo.getTitle();
+                    titleToDisplay = mTodo.getTitle().trim();
                 }
 
                 Toast.makeText(getActivity(),
