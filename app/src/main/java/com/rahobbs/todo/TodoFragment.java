@@ -1,8 +1,10 @@
 package com.rahobbs.todo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,8 +15,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -119,6 +124,8 @@ public class TodoFragment extends Fragment {
             savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_todo, container, false);
         mTitle = (EditText) v.findViewById(R.id.todo_title);
+        mTitle.requestFocus();
+
         mTitle.setText(mTodo.getTitle());
         mTitle.addTextChangedListener(new TextWatcher() {
             @Override
