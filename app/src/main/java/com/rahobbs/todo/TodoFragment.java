@@ -91,8 +91,9 @@ public class TodoFragment extends Fragment {
                 TodoLab.get(getActivity()).deleteTodoItem(crimeId);
 
                 String titleToDisplay;
-
-                if(mTodo.getTitle().length() > 25){
+                if (mTodo.getTitle() == null) {
+                    titleToDisplay = "Unnamed task";
+                } else if (mTodo.getTitle().length() > 25) {
                     titleToDisplay = mTodo.getTitle().substring(0, 25);
                 } else {
                     titleToDisplay = mTodo.getTitle();
@@ -114,7 +115,7 @@ public class TodoFragment extends Fragment {
     }
 
     private void saveNewItem() {
-        if(mTodo.getTitle() == null){
+        if (mTodo.getTitle() == null) {
             UUID crimeId = mTodo.getID();
             TodoLab.get(getActivity()).deleteTodoItem(crimeId);
             getActivity().finish();
