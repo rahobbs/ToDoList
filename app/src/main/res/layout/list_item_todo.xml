@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_todo_completed_check_box"
-        android:textStyle="bold"
         android:textColor="@color/darkFont"
         android:textSize="18sp"
         android:paddingTop="4dp"
@@ -25,18 +24,28 @@
         android:paddingRight="4dp"
         android:maxLines="1"
         android:ellipsize="end"
-        tools:text="Title"/>
+        tools:text="Title of todo item"/>
+
+    <TextView
+        android:id="@+id/due_date_label"
+        android:text="@string/due_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_item_todo_title_text_view"
+        android:textSize="12sp"
+        android:paddingStart="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        />
 
     <TextView
         android:id="@+id/list_item_todo_date_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_todo_completed_check_box"
-        android:layout_below="@id/list_item_todo_title_text_view"
         android:textSize="12sp"
         android:padding="4dp"
-        tools:text="Due date"/>
-
-
+        tools:text="Thu 18 Feb 2016"
+        android:layout_below="@+id/list_item_todo_title_text_view"
+        android:layout_toEndOf="@id/due_date_label"/>
 
 </RelativeLayout>
