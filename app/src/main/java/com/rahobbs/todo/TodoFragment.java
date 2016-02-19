@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class TodoFragment extends Fragment {
 
     private TodoItem mTodo;
     private EditText mTitle;
-    private Button mDueDateButton;
+    private TextView mDueDateTextField;
     private CheckBox mCompletedCheckbox;
 
     public static TodoFragment newInstance(UUID todoId) {
@@ -144,9 +145,9 @@ public class TodoFragment extends Fragment {
             }
         });
 
-        mDueDateButton = (Button) v.findViewById(R.id.todo_date);
+        mDueDateTextField = (TextView) v.findViewById(R.id.todo_date);
         updateDate();
-        mDueDateButton.setOnClickListener(new View.OnClickListener() {
+        mDueDateTextField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
@@ -192,6 +193,6 @@ public class TodoFragment extends Fragment {
 
     private void updateDate() {
         SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
-        mDueDateButton.setText(format.format(mTodo.getDate()));
+        mDueDateTextField.setText(format.format(mTodo.getDate()));
     }
 }
