@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class TodoFragment extends Fragment {
     private EditText mTitle;
     private TextView mDueDateTextField;
     private CheckBox mCompletedCheckbox;
+    private ImageView mCalendarImage;
+    private TextView mDueDateLabel;
 
     public static TodoFragment newInstance(UUID todoId) {
         Bundle args = new Bundle();
@@ -147,13 +150,27 @@ public class TodoFragment extends Fragment {
 
         mDueDateTextField = (TextView) v.findViewById(R.id.todo_date);
         updateDate();
+
+        mCalendarImage = (ImageView) v.findViewById(R.id.calendar_image);
+        mCalendarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchDatePicker();
+            }
+        });
+
+        mDueDateLabel = (TextView) v.findViewById(R.id.due_date_label);
+        mDueDateLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchDatePicker();
+            }
+        });
+
         mDueDateTextField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mTodo.getDate());
-                dialog.setTargetFragment(TodoFragment.this, REQUEST_DATE);
-                dialog.show(fragmentManager, DIALOG_DATE);
+                launchDatePicker();
             }
         });
 
@@ -177,6 +194,13 @@ public class TodoFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void launchDatePicker() {
+        FragmentManager fragmentManager = getFragmentManager();
+        DatePickerFragment dialog = DatePickerFragment.newInstance(mTodo.getDate());
+        dialog.setTargetFragment(TodoFragment.this, REQUEST_DATE);
+        dialog.show(fragmentManager, DIALOG_DATE);
     }
 
     @Override

@@ -21,7 +21,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="48dp">
 
+        <ImageView
+            android:id="@+id/calendar_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_calendar"/>
+
         <TextView
+            android:id="@+id/due_date_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/due_date_label"
@@ -35,6 +42,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/todo_date"
             tools:text="Feb 19 2016"
+            android:textColor="@color/darkFont"
             android:layout_weight="2"
             android:padding="4dp"/>
 
