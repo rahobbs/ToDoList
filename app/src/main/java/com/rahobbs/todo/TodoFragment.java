@@ -128,7 +128,7 @@ public class TodoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTodo.setTitle(s.toString());
+                mTodo.setTitle(s.toString().trim());
             }
 
             @Override
