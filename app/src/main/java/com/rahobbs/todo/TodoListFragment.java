@@ -1,7 +1,7 @@
 package com.rahobbs.todo;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -108,6 +108,7 @@ public class TodoListFragment extends Fragment {
 
     private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTitleTextView;
+        public TextView mDateLabel;
         public TextView mDateTextView;
         public CheckBox mCompletedCheckBox;
         private TodoItem mTodo;
@@ -119,6 +120,7 @@ public class TodoListFragment extends Fragment {
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_todo_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_todo_completed_check_box);
+            mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
 
 
         }
@@ -130,6 +132,9 @@ public class TodoListFragment extends Fragment {
 
             if(mTodo.isCompleted()){
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
@@ -147,9 +152,13 @@ public class TodoListFragment extends Fragment {
                     if (boxChecked) {
                         mTodo.setCompleted(false);
                         mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
+                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
                     } else {
                         mTodo.setCompleted(true);
                         mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     }
                     TodoLab.get(getActivity()).updateItem(mTodo);
 
