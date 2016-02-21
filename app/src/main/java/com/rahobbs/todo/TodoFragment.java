@@ -184,9 +184,9 @@ public class TodoFragment extends Fragment {
             }
         });
 
-        FloatingActionButton saveFab = (FloatingActionButton) v.findViewById(R.id.save_fab);
+        Button saveButton = (Button) v.findViewById(R.id.save_button);
 
-        saveFab.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveNewItem();
