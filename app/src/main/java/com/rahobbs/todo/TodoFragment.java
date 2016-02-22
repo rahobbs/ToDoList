@@ -86,6 +86,12 @@ public class TodoFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_send_feedback:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                Feedback fb = new Feedback();
+                fb.sendFeedback(i);
+                startActivity(Intent.createChooser(i, "Send mail..."));
+                return true;
             case R.id.menu_item_delete_todo:
                 UUID crimeId = mTodo.getID();
                 TodoLab.get(getActivity()).deleteTodoItem(crimeId);
@@ -103,12 +109,6 @@ public class TodoFragment extends Fragment {
                         "\"" + titleToDisplay + "\" deleted",
                         Toast.LENGTH_SHORT).show();
                 getActivity().finish();
-            case R.id.menu_item_send_feedback:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                Feedback fb = new Feedback();
-                fb.sendFeedback(i);
-                startActivity(Intent.createChooser(i, "Send mail..."));
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
