@@ -91,8 +91,10 @@ public class TodoListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_send_feedback:
-                Feedback feedback = new Feedback();
-                feedback.sendFeedback();
+                Intent i = new Intent(Intent.ACTION_SEND);
+                Feedback fb = new Feedback();
+                fb.sendFeedback(i);
+                startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

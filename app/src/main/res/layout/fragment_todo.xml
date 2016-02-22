@@ -83,10 +83,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/accentLight"
         android:gravity="end|center_vertical|center_horizontal"
         android:text="Save"
         android:textAlignment="center"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:textColor="@color/white"/>
 
 </RelativeLayout>
