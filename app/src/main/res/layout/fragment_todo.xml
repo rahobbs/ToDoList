@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="end|center_vertical|center_horizontal"
-        android:background="@color/colorAccent"
+        android:background="@color/accentLight"
         android:text="Save"
         android:textColor="@color/white"
         android:textAlignment="center"/>

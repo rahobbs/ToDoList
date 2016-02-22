@@ -7,5 +7,10 @@
         android:icon="@drawable/ic_menu_delete"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/menu_item_send_feedback"
+        android:title="@string/send_feedback"
+        app:showAsAction="never"/>
+
 
 </menu>
