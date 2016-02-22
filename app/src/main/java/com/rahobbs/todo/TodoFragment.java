@@ -104,11 +104,8 @@ public class TodoFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             case R.id.menu_item_send_feedback:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@rahobbs.com"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "Todo List Customer Feedback");
-
+                Feedback feedback = new Feedback();
+                feedback.sendFeedback();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

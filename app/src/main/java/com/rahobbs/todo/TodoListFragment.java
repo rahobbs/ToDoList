@@ -91,15 +91,8 @@ public class TodoListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_send_feedback:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@rahobbs.com"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "Todo List Customer Feedback");
-                try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
+                Feedback feedback = new Feedback();
+                feedback.sendFeedback();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -131,7 +124,7 @@ public class TodoListFragment extends Fragment {
             mTodo = todo;
             mTitleTextView.setText(mTodo.getTitle().trim());
 
-            if(mTodo.isCompleted()){
+            if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
                 mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -140,7 +133,7 @@ public class TodoListFragment extends Fragment {
 
             mDateTextView.setText(format.format(mTodo.getDate()));
 
-            if(mTodo.isCompleted()){
+            if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
             }
 
@@ -154,7 +147,7 @@ public class TodoListFragment extends Fragment {
                         mTodo.setCompleted(false);
                         mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
                         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     } else {
                         mTodo.setCompleted(true);
                         mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));

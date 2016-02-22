@@ -3,8 +3,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_delete_todo"
-        android:title="@string/delete_todo"
         android:icon="@drawable/ic_menu_delete"
+        android:title="@string/delete_todo"
         app:showAsAction="ifRoom|withText"/>
 
     <item
