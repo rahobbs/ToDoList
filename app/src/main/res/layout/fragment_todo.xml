@@ -21,16 +21,18 @@
                 android:layout_height="wrap_content"
                 android:capitalize="sentences"
                 android:hint="@string/todo_title_hint"
+                android:focusable="true"
                 android:paddingTop="16dp"/>
 
 
             <LinearLayout
+                android:id="@+id/dates_and_checks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/todo_title"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:paddingBottom="48dp">
+                android:paddingBottom="4dp">
 
                 <LinearLayout
                     android:id="@+id/date_components"
@@ -75,6 +77,14 @@
                     android:text="@string/todo_completed_label"/>
 
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/todo_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dates_and_checks"
+                android:hint="Task description"/>
+
         </RelativeLayout>
     </ScrollView>
 

@@ -138,7 +138,9 @@ public class TodoListFragment extends Fragment {
         public void bindTodo(TodoItem todo) {
             SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
             mTodo = todo;
-            mTitleTextView.setText(mTodo.getTitle().trim());
+
+            if(mTodo.getTitle() != null){
+            mTitleTextView.setText(mTodo.getTitle().trim());}
 
             if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));

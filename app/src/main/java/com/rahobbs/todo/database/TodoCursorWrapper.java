@@ -6,6 +6,7 @@ import android.database.CursorWrapper;
 import com.rahobbs.todo.TodoItem;
 import com.rahobbs.todo.database.TodoSchema.TodoTable;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,11 +24,18 @@ public class TodoCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(TodoTable.Cols.TITLE));
         long date = getLong(getColumnIndex(TodoTable.Cols.DATE));
         int isCompleted = getInt(getColumnIndex(TodoTable.Cols.COMPLETED));
+        String details = getString(getColumnIndex(TodoTable.Cols.DETAILS));
+        String parents = getString(getColumnIndex(TodoTable.Cols.PARENTS));
+        String children = getString(getColumnIndex(TodoTable.Cols.CHILDREN));
+
 
         TodoItem todoItem = new TodoItem(UUID.fromString(uuidString));
         todoItem.setTitle(title);
         todoItem.setDate(new Date(date));
         todoItem.setCompleted(isCompleted != 0);
+        todoItem.setDetails(details);
+        todoItem.setParents(parents);
+        todoItem.setChildren(children);
 
         return todoItem;
     }
