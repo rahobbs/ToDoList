@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,7 @@ public class TodoFragment extends Fragment {
 
     private TodoItem mTodo;
     private EditText mTitle;
+    private EditText mDetails;
     private TextView mDueDateTextField;
     private CheckBox mCompletedCheckbox;
     private LinearLayout mDateComponents;
@@ -122,8 +124,8 @@ public class TodoFragment extends Fragment {
 
     private void saveNewItem() {
         if (mTodo.getTitle() == null) {
-            UUID crimeId = mTodo.getID();
-            TodoLab.get(getActivity()).deleteTodoItem(crimeId);
+            UUID mTodoID = mTodo.getID();
+            TodoLab.get(getActivity()).deleteTodoItem(mTodoID);
             getActivity().finish();
         }
 
@@ -147,6 +149,26 @@ public class TodoFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTodo.setTitle(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mDetails = (EditText) v.findViewById(R.id.todo_details);
+        mDetails.setText(mTodo.getDetails());
+        mDetails.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTodo.setDetails(s.toString());
+                Log.v("Get details: ", mTodo.getDetails());
             }
 
             @Override
