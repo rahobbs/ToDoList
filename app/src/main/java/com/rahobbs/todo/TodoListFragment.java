@@ -7,14 +7,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,7 +104,7 @@ public class TodoListFragment extends Fragment {
         }
     }
 
-    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mTitleTextView;
         public TextView mDateLabel;
         public TextView mDateTextView;
@@ -116,8 +119,16 @@ public class TodoListFragment extends Fragment {
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_todo_completed_check_box);
             mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
+            RelativeLayout mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
 
+            mListItem.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View arg0) {
+                    Toast.makeText(getActivity(), "Long Clicked " ,
+                            Toast.LENGTH_SHORT).show();
 
+                    return true;    // <- set to true
+                }
+            });
         }
 
         @SuppressWarnings("deprecation")
@@ -167,6 +178,7 @@ public class TodoListFragment extends Fragment {
             Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
             startActivity(intent);
         }
+
 
     }
 
