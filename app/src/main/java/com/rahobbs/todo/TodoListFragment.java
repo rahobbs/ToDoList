@@ -128,7 +128,6 @@ public class TodoListFragment extends Fragment {
                     Toast.makeText(getActivity(), "Long Clicked " ,
                             Toast.LENGTH_SHORT).show();
 
-                    mTitleTextView.setBackgroundColor(getResources().getColor(R.color.accentLight));
                     return true;    // <- set to true
                 }
             });
