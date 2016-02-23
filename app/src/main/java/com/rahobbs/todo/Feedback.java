@@ -11,10 +11,6 @@ import java.util.Random;
  */
 public class Feedback {
 
-    int rand = new Random().nextInt(301);
-    String versionCode = String.valueOf(BuildConfig.VERSION_CODE);
-    int ticketCode = rand + 100;
-
 
     public Intent sendFeedback(Intent i) {
         int rand = new Random().nextInt(301);
