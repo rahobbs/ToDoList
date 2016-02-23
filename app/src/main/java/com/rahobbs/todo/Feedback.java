@@ -1,8 +1,6 @@
 package com.rahobbs.todo;
 import android.content.Intent;
 
-import com.rahobbs.todo.BuildConfig;
-
 import java.util.Random;
 
 /**
