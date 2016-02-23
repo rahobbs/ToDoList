@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
+
 /**
  * Created by rachael on 2/2/16.
  * Defines an abstract activity to host a single fragment

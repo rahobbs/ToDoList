@@ -19,6 +19,7 @@
                 android:id="@+id/todo_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:capitalize="sentences"
                 android:hint="@string/todo_title_hint"
                 android:focusable="true"

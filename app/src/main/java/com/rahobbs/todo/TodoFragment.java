@@ -1,14 +1,10 @@
 package com.rahobbs.todo;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,16 +12,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
 /**
  * Created by rachael on 2/1/16.
@@ -137,6 +131,12 @@ public class TodoFragment extends Fragment {
             savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_todo, container, false);
         mTitle = (EditText) v.findViewById(R.id.todo_title);
+
+        if(mTodo.isCompleted()){
+            mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
+        }
+
+        mTitle.setFocusable(true);
         mTitle.requestFocus();
 
         mTitle.setText(mTodo.getTitle());
@@ -194,6 +194,11 @@ public class TodoFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTodo.setCompleted(isChecked);
+                if(mTodo.isCompleted()){
+                mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
+                } else{
+                    mTitle.setTextColor(getResources().getColor(R.color.darkFont));
+                }
             }
         });
 
@@ -203,10 +208,9 @@ public class TodoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveNewItem();
-                getActivity().finish();
+                navigateUpFromSameTask(getActivity());
             }
         });
-
         return v;
     }
 
