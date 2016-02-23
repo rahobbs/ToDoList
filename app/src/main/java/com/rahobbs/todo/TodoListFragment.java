@@ -1,6 +1,7 @@
 package com.rahobbs.todo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -110,6 +111,7 @@ public class TodoListFragment extends Fragment {
         public TextView mDateTextView;
         public CheckBox mCompletedCheckBox;
         private TodoItem mTodo;
+        public RelativeLayout mListItem;
 
         public TodoHolder(View itemView) {
             super(itemView);
@@ -119,13 +121,14 @@ public class TodoListFragment extends Fragment {
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_todo_completed_check_box);
             mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
-            RelativeLayout mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
+            mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
                     Toast.makeText(getActivity(), "Long Clicked " ,
                             Toast.LENGTH_SHORT).show();
 
+                    mTitleTextView.setBackgroundColor(getResources().getColor(R.color.accentLight));
                     return true;    // <- set to true
                 }
             });
