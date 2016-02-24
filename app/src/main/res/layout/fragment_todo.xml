@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:capitalize="sentences"
+                android:minLines="2"
                 android:hint="@string/todo_title_hint"
                 android:focusable="true"
                 android:paddingTop="16dp"/>
@@ -78,14 +79,6 @@
                     android:text="@string/todo_completed_label"/>
 
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/todo_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/dates_and_checks"
-                android:hint="Task description"/>
-
         </RelativeLayout>
     </ScrollView>
 

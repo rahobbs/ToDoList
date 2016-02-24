@@ -135,7 +135,8 @@ public class TodoListFragment extends Fragment {
             mTodo = todo;
 
             if(mTodo.getTitle() != null){
-            mTitleTextView.setText(mTodo.getTitle().trim());}
+            mTitleTextView.setText(mTodo.getTitle().trim());
+            }
 
             if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));

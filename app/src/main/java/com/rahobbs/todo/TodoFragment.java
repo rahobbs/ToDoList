@@ -96,13 +96,13 @@ public class TodoFragment extends Fragment {
                 if (mTodo.getTitle() == null) {
                     titleToDisplay = "Unnamed task";
                 } else if (mTodo.getTitle().length() > 25) {
-                    titleToDisplay = mTodo.getTitle().trim().substring(0, 25);
+                    titleToDisplay = "\"" + mTodo.getTitle().trim().substring(0, 25) + "\"";
                 } else {
-                    titleToDisplay = mTodo.getTitle().trim();
+                    titleToDisplay = "\"" + mTodo.getTitle().trim() + "\"";
                 }
 
                 Toast.makeText(getActivity(),
-                        "\"" + titleToDisplay + "\" deleted",
+                        titleToDisplay + " deleted",
                         Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             default:
@@ -132,7 +132,7 @@ public class TodoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_todo, container, false);
         mTitle = (EditText) v.findViewById(R.id.todo_title);
 
-        if(mTodo.isCompleted()){
+        if (mTodo.isCompleted()) {
             mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
         }
 
@@ -157,25 +157,6 @@ public class TodoFragment extends Fragment {
             }
         });
 
-        mDetails = (EditText) v.findViewById(R.id.todo_details);
-        mDetails.setText(mTodo.getDetails());
-        mDetails.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTodo.setDetails(s.toString());
-                Log.v("Get details: ", mTodo.getDetails());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         mDueDateTextField = (TextView) v.findViewById(R.id.todo_date);
         updateDate();
@@ -194,9 +175,9 @@ public class TodoFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTodo.setCompleted(isChecked);
-                if(mTodo.isCompleted()){
-                mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
-                } else{
+                if (mTodo.isCompleted()) {
+                    mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
+                } else {
                     mTitle.setTextColor(getResources().getColor(R.color.darkFont));
                 }
             }
