@@ -81,6 +81,7 @@ public class TodoListFragment extends Fragment {
     }
 
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -138,18 +139,8 @@ public class TodoListFragment extends Fragment {
             mTitleTextView.setText(mTodo.getTitle().trim());
             }
 
-            if (mTodo.isCompleted()) {
-                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
-                mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-            }
-
             mDateTextView.setText(format.format(mTodo.getDate()));
 
-            if (mTodo.isCompleted()) {
-                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
-            }
 
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -172,6 +163,17 @@ public class TodoListFragment extends Fragment {
 
                 }
             });
+        }
+
+        public void updateCompleted(TodoItem item){
+
+            if (item.isCompleted()) {
+                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+            }
+
         }
 
         @Override
@@ -203,6 +205,7 @@ public class TodoListFragment extends Fragment {
         public void onBindViewHolder(TodoHolder holder, int position) {
             TodoItem todoItem = mTodoItems.get(position);
             holder.bindTodo(todoItem);
+            holder.updateCompleted(todoItem);
         }
 
         @Override
