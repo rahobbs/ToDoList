@@ -70,7 +70,6 @@ public class TodoListFragment extends Fragment {
             mTodoRecycleView.setAdapter(mAdapter);
         } else {
             mAdapter.setTodoItems(todoItems);
-            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -79,8 +78,6 @@ public class TodoListFragment extends Fragment {
         super.onResume();
         updateUI();
     }
-
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -130,17 +127,15 @@ public class TodoListFragment extends Fragment {
             });
         }
 
-        @SuppressWarnings("deprecation")
         public void bindTodo(TodoItem todo) {
             SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
             mTodo = todo;
 
             if(mTodo.getTitle() != null){
-            mTitleTextView.setText(mTodo.getTitle().trim());
+                mTitleTextView.setText(mTodo.getTitle().trim());
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
-
 
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -160,14 +155,12 @@ public class TodoListFragment extends Fragment {
                         mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     }
                     TodoLab.get(getActivity()).updateItem(mTodo);
-
                 }
             });
         }
 
-        public void updateCompleted(TodoItem item){
-
-            if (item.isCompleted()) {
+        public void updateCompleted(){
+            if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
                 mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -197,7 +190,6 @@ public class TodoListFragment extends Fragment {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item_todo, parent, false);
 
-
             return new TodoHolder(view);
         }
 
@@ -205,7 +197,7 @@ public class TodoListFragment extends Fragment {
         public void onBindViewHolder(TodoHolder holder, int position) {
             TodoItem todoItem = mTodoItems.get(position);
             holder.bindTodo(todoItem);
-            holder.updateCompleted(todoItem);
+            holder.updateCompleted();
         }
 
         @Override
@@ -215,6 +207,7 @@ public class TodoListFragment extends Fragment {
 
         public void setTodoItems(List<TodoItem> todoItems) {
             mTodoItems = todoItems;
+            notifyDataSetChanged();
         }
     }
 

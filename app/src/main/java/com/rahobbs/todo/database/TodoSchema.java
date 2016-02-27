@@ -16,7 +16,6 @@ public class TodoSchema {
             public static final String DETAILS = "details";
             public static final String PARENTS = "parents";
             public static final String CHILDREN = "children";
-
         }
     }
 }

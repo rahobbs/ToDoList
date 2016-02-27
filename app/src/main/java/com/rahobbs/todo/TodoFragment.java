@@ -70,7 +70,6 @@ public class TodoFragment extends Fragment {
         if (mTodo == null) {
             throw new RuntimeException("No Todo item with provided ID (" + todoId.toString() + ") was found.");
         }
-
     }
 
     @Override
@@ -89,8 +88,8 @@ public class TodoFragment extends Fragment {
                 startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
             case R.id.menu_item_delete_todo:
-                UUID crimeId = mTodo.getID();
-                TodoLab.get(getActivity()).deleteTodoItem(crimeId);
+                UUID todoId = mTodo.getID();
+                TodoLab.get(getActivity()).deleteTodoItem(todoId);
 
                 String titleToDisplay;
                 if (mTodo.getTitle() == null) {
@@ -112,15 +111,14 @@ public class TodoFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         saveNewItem();
+        super.onPause();
     }
 
     private void saveNewItem() {
         if (mTodo.getTitle() == null) {
             UUID mTodoID = mTodo.getID();
             TodoLab.get(getActivity()).deleteTodoItem(mTodoID);
-            getActivity().finish();
         }
 
         TodoLab.get(getActivity()).updateItem(mTodo);
@@ -157,7 +155,6 @@ public class TodoFragment extends Fragment {
             }
         });
 
-
         mDueDateTextField = (TextView) v.findViewById(R.id.todo_date);
         updateDate();
 
@@ -175,7 +172,7 @@ public class TodoFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTodo.setCompleted(isChecked);
-                if (mTodo.isCompleted()) {
+                if (isChecked) {
                     mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
                 } else {
                     mTitle.setTextColor(getResources().getColor(R.color.darkFont));
@@ -189,7 +186,8 @@ public class TodoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveNewItem();
-                navigateUpFromSameTask(getActivity());
+                getActivity().finish();
+                //navigateUpFromSameTask(getActivity());
             }
         });
         return v;
