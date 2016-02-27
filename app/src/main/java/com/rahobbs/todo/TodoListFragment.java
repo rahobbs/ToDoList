@@ -30,7 +30,6 @@ import java.util.Locale;
 public class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecycleView;
-    private TodoAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,18 +57,17 @@ public class TodoListFragment extends Fragment {
 
         updateUI();
         return view;
-
     }
 
     private void updateUI() {
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
 
-        if (mAdapter == null) {
-            mAdapter = new TodoAdapter(todoItems);
-            mTodoRecycleView.setAdapter(mAdapter);
+        TodoAdapter recyclerAdapter = (TodoAdapter) mTodoRecycleView.getAdapter();
+        if (recyclerAdapter == null) {
+            mTodoRecycleView.setAdapter(new TodoAdapter(todoItems));
         } else {
-            mAdapter.setTodoItems(todoItems);
+            recyclerAdapter.setTodoItems(todoItems);
         }
     }
 
@@ -119,7 +117,7 @@ public class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-                    Toast.makeText(getActivity(), "Long Clicked " ,
+                    Toast.makeText(getActivity(), "Long Clicked ",
                             Toast.LENGTH_SHORT).show();
 
                     return true;    // <- set to true
@@ -141,19 +139,18 @@ public class TodoListFragment extends Fragment {
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    boolean boxChecked = mTodo.isCompleted();
+                    mTodo.setCompleted(isChecked);
 
-                    if (boxChecked) {
-                        mTodo.setCompleted(false);
-                        mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
-                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    } else {
-                        mTodo.setCompleted(true);
+                    if (isChecked) {
                         mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
                         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    } else {
+                        mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
+                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
+
                     TodoLab.get(getActivity()).updateItem(mTodo);
                 }
             });

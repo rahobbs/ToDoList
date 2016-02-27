@@ -66,6 +66,7 @@ public class TodoFragment extends Fragment {
         }
 
         mTodo = TodoLab.get(getActivity()).getItem(todoId);
+        Log.v("DETAIL_CREATED", mTodo.getID().toString());
 
         if (mTodo == null) {
             throw new RuntimeException("No Todo item with provided ID (" + todoId.toString() + ") was found.");
@@ -112,6 +113,7 @@ public class TodoFragment extends Fragment {
     @Override
     public void onPause() {
         saveNewItem();
+        Log.v("DETAIL_PAUSE", mTodo.getID().toString());
         super.onPause();
     }
 
@@ -122,6 +124,7 @@ public class TodoFragment extends Fragment {
         }
 
         TodoLab.get(getActivity()).updateItem(mTodo);
+        Log.v("DETAIL_SAVE", mTodo.getID().toString());
     }
 
     @Override
@@ -186,6 +189,7 @@ public class TodoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveNewItem();
+                Log.v("DETAIL_CLICK_SAVE", mTodo.getID().toString());
                 getActivity().finish();
                 //navigateUpFromSameTask(getActivity());
             }
