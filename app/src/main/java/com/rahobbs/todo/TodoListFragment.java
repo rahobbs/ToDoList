@@ -182,8 +182,13 @@ public class TodoListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            if(!selectedItems.contains(mTodo)){
             Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
             startActivity(intent);
+            }
+
+            selectedItems.remove(mTodo);
+            mTitleTextView.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
         }
 
 
