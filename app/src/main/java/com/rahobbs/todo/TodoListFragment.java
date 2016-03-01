@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +32,7 @@ import java.util.Locale;
 public class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecycleView;
+    public List<TodoItem> selectedItems = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,8 +95,18 @@ public class TodoListFragment extends Fragment {
                 fb.sendFeedback(i);
                 startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
+            case R.id.multi_delete:
+                Log.v("Items to delete: ", selectedItems.toString());
+                deleteSelected(selectedItems);
+                updateUI();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void deleteSelected(List<TodoItem> selectedItems) {
+        for (TodoItem i : selectedItems) {
+            TodoLab.get(getActivity()).deleteTodoItem(i.getID());
         }
     }
 
@@ -117,8 +130,8 @@ public class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-                    Toast.makeText(getActivity(), "Long Clicked ",
-                            Toast.LENGTH_SHORT).show();
+                    selectedItems.add(mTodo);
+                    mTitleTextView.setBackgroundColor(getResources().getColor(R.color.accentLight));
 
                     return true;    // <- set to true
                 }
@@ -131,6 +144,7 @@ public class TodoListFragment extends Fragment {
 
             if(mTodo.getTitle() != null){
                 mTitleTextView.setText(mTodo.getTitle().trim());
+                mTitleTextView.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
