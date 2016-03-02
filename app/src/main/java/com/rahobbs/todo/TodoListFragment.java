@@ -33,6 +33,7 @@ public class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecycleView;
     public List<TodoItem> selectedItems = new ArrayList<>();
+    public Boolean multiSelectMode = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,7 @@ public class TodoListFragment extends Fragment {
         }
     }
 
-    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTitleTextView;
         public TextView mDateLabel;
         public TextView mDateTextView;
@@ -131,7 +132,8 @@ public class TodoListFragment extends Fragment {
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
                     selectedItems.add(mTodo);
-                    mTitleTextView.setBackgroundColor(getResources().getColor(R.color.accentLight));
+                    multiSelectMode = true;
+                    mListItem.setBackgroundColor(getResources().getColor(R.color.accentLight));
 
                     return true;    // <- set to true
                 }
@@ -142,9 +144,9 @@ public class TodoListFragment extends Fragment {
             SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
             mTodo = todo;
 
-            if(mTodo.getTitle() != null){
+            if (mTodo.getTitle() != null) {
                 mTitleTextView.setText(mTodo.getTitle().trim());
-                mTitleTextView.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
+                mListItem.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
@@ -170,7 +172,7 @@ public class TodoListFragment extends Fragment {
             });
         }
 
-        public void updateCompleted(){
+        public void updateCompleted() {
             if (mTodo.isCompleted()) {
                 mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
                 mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -182,13 +184,22 @@ public class TodoListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if(!selectedItems.contains(mTodo)){
-            Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
-            startActivity(intent);
+            if (multiSelectMode == false) {
+                Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
+                startActivity(intent);
             }
-
-            selectedItems.remove(mTodo);
-            mTitleTextView.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
+            if (multiSelectMode) {
+                if (selectedItems.contains(mTodo)) {
+                    selectedItems.remove(mTodo);
+                    mListItem.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
+                    if (selectedItems.isEmpty()){
+                        multiSelectMode = false;
+                    }
+                } else {
+                    selectedItems.add(mTodo);
+                    mListItem.setBackgroundColor(getResources().getColor(R.color.accentLight));
+                }
+            }
         }
 
 
