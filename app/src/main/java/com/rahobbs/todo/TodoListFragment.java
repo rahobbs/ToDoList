@@ -163,6 +163,7 @@ public class TodoListFragment extends Fragment{
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
                     selectedItems.add(mTodo);
+                    Log.v("tag", String.valueOf(getAdapterPosition()));
                     multiSelectMode = true;
                     mListItem.setBackgroundColor(getResources().getColor(R.color.done_task));
 
@@ -213,6 +214,7 @@ public class TodoListFragment extends Fragment{
 
         @Override
         public void onClick(View v) {
+            Log.v("tag", String.valueOf(getAdapterPosition()));
             if (!multiSelectMode) {
                 Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
                 startActivity(intent);
