@@ -5,15 +5,17 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.view.ActionMode;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -21,21 +23,20 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.Inflater;
 
 /**
  * Created by rachael on 2/2/16.
  * Fragment that contains the list of to-do items
  */
-public class TodoListFragment extends Fragment {
+public class TodoListFragment extends Fragment{
 
-    private RecyclerView mTodoRecycleView;
+    private RecyclerView mTodoRecyclerView;
     public List<TodoItem> selectedItems = new ArrayList<>();
     public Boolean multiSelectMode = false;
 
@@ -49,8 +50,9 @@ public class TodoListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
-        mTodoRecycleView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
-        mTodoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTodoRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        mTodoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         FloatingActionButton addFab = (FloatingActionButton) view.findViewById(R.id.add_fab);
 
         addFab.setOnClickListener(new View.OnClickListener() {
@@ -64,16 +66,35 @@ public class TodoListFragment extends Fragment {
         });
 
         updateUI();
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        TodoLab todoLab = TodoLab.get(getActivity());
+        List<TodoItem> todoItems = todoLab.getItems();
+        TodoAdapter adapter = new TodoAdapter(todoItems);
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mTodoRecyclerView);
     }
 
     private void updateUI() {
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
 
-        TodoAdapter recyclerAdapter = (TodoAdapter) mTodoRecycleView.getAdapter();
+        TodoAdapter recyclerAdapter = (TodoAdapter) mTodoRecyclerView.getAdapter();
         if (recyclerAdapter == null) {
-            mTodoRecycleView.setAdapter(new TodoAdapter(todoItems));
+            mTodoRecyclerView.setAdapter(new TodoAdapter(todoItems));
         } else {
             recyclerAdapter.setTodoItems(todoItems);
         }
@@ -138,20 +159,6 @@ public class TodoListFragment extends Fragment {
             mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
             mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
             mHandle = (ImageView) itemView.findViewById(R.id.reorder_handle);
-
-            mHandle.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        mHandle.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                    }
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        mHandle.setBackgroundColor(getResources().getColor(R.color.default_background_light));
-                    }
-                    return true;
-                }
-            });
-
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
@@ -225,7 +232,7 @@ public class TodoListFragment extends Fragment {
         }
     }
 
-    private class TodoAdapter extends RecyclerView.Adapter<TodoHolder> {
+    private class TodoAdapter extends RecyclerView.Adapter<TodoHolder> implements ItemTouchHelperAdapter {
         private List<TodoItem> mTodoItems;
 
         public TodoAdapter(List<TodoItem> todoItems) {
@@ -256,7 +263,27 @@ public class TodoListFragment extends Fragment {
             mTodoItems = todoItems;
             notifyDataSetChanged();
         }
+
+        @Override
+        public void onItemDismiss(int position) {
+            /*
+            Swipe dismiss currently disabled.
+             */
+        }
+
+        @Override
+        public boolean onItemMove(int fromPosition, int toPosition) {
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition; i++) {
+                    Collections.swap(mTodoItems, i, i + 1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(mTodoItems, i, i - 1);
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
     }
-
-
 }
