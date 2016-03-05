@@ -8,16 +8,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TodoListActivity">
+        <activity android:name=".activities.TodoListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".TodoPagerActivity"
+        <activity android:name=".activities.TodoPagerActivity"
                   android:label="@string/app_name"
-            android:parentActivityName=".TodoListActivity"
+            android:parentActivityName=".activities.TodoListActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible"></activity>
     </application>
 

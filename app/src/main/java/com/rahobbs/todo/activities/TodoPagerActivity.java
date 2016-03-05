@@ -1,4 +1,4 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.rahobbs.todo.R;
+import com.rahobbs.todo.fragments.TodoFragment;
+import com.rahobbs.todo.helpers.TodoItem;
+import com.rahobbs.todo.helpers.TodoLab;
 
 import java.util.List;
 import java.util.UUID;

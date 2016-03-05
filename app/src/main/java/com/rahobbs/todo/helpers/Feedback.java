@@ -1,6 +1,8 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.helpers;
 import android.content.Intent;
 import android.util.Log;
+
+import com.rahobbs.todo.BuildConfig;
 
 /**
  * Created by rachael on 2/22/16.

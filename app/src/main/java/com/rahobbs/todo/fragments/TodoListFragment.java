@@ -1,11 +1,10 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.fragments;
 
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -14,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -23,6 +20,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.rahobbs.todo.helpers.Feedback;
+import com.rahobbs.todo.R;
+import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
+import com.rahobbs.todo.helpers.TodoItem;
+import com.rahobbs.todo.helpers.TodoLab;
+import com.rahobbs.todo.activities.TodoPagerActivity;
+import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +41,9 @@ import java.util.Locale;
  */
 public class TodoListFragment extends Fragment{
 
-    private RecyclerView mTodoRecyclerView;
     public List<TodoItem> selectedItems = new ArrayList<>();
     public Boolean multiSelectMode = false;
+    private RecyclerView mTodoRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +84,7 @@ public class TodoListFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
-        TodoAdapter adapter = new TodoAdapter(todoItems);
+        TodoListAdapter adapter = new TodoListAdapter(todoItems);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback =
@@ -92,9 +97,9 @@ public class TodoListFragment extends Fragment{
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
 
-        TodoAdapter recyclerAdapter = (TodoAdapter) mTodoRecyclerView.getAdapter();
+        TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
         if (recyclerAdapter == null) {
-            mTodoRecyclerView.setAdapter(new TodoAdapter(todoItems));
+            mTodoRecyclerView.setAdapter(new TodoListAdapter(todoItems));
         } else {
             recyclerAdapter.setTodoItems(todoItems);
         }
@@ -145,9 +150,9 @@ public class TodoListFragment extends Fragment{
         public TextView mDateLabel;
         public TextView mDateTextView;
         public CheckBox mCompletedCheckBox;
-        private TodoItem mTodo;
         public RelativeLayout mListItem;
         public ImageView mHandle;
+        private TodoItem mTodo;
 
         public TodoHolder(View itemView) {
             super(itemView);
@@ -234,10 +239,10 @@ public class TodoListFragment extends Fragment{
         }
     }
 
-    private class TodoAdapter extends RecyclerView.Adapter<TodoHolder> implements ItemTouchHelperAdapter {
+    private class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements ItemTouchHelperAdapter {
         private List<TodoItem> mTodoItems;
 
-        public TodoAdapter(List<TodoItem> todoItems) {
+        public TodoListAdapter(List<TodoItem> todoItems) {
             mTodoItems = todoItems;
         }
 

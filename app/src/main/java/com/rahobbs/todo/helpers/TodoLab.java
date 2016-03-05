@@ -1,14 +1,12 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.rahobbs.todo.database.TodoBaseHelper;
 import com.rahobbs.todo.database.TodoCursorWrapper;
-import com.rahobbs.todo.database.TodoSchema;
 import com.rahobbs.todo.database.TodoSchema.TodoTable;
 
 import java.util.ArrayList;
@@ -24,6 +22,11 @@ public class TodoLab {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
+    private TodoLab(Context context) {
+        mContext = context.getApplicationContext();
+        mDatabase = new TodoBaseHelper(mContext).getWritableDatabase();
+    }
+
     public static TodoLab get(Context context) {
         if (sTodoLab == null) {
             sTodoLab = new TodoLab(context);
@@ -31,9 +34,16 @@ public class TodoLab {
         return sTodoLab;
     }
 
-    private TodoLab(Context context) {
-        mContext = context.getApplicationContext();
-        mDatabase = new TodoBaseHelper(mContext).getWritableDatabase();
+    private static ContentValues getContentValues(TodoItem todoItem) {
+        ContentValues values = new ContentValues();
+
+        values.put(TodoTable.Cols.UUID, todoItem.getID().toString());
+        values.put(TodoTable.Cols.TITLE, todoItem.getTitle());
+        values.put(TodoTable.Cols.DATE, todoItem.getDate().getTime());
+        values.put(TodoTable.Cols.COMPLETED, todoItem.isCompleted() ? 1 : 0);
+        values.put(TodoTable.Cols.DETAILS, todoItem.getDetails());
+
+        return values;
     }
 
     public void addTodoItem(TodoItem item) {
@@ -91,18 +101,6 @@ public class TodoLab {
         mDatabase.update(TodoTable.NAME, values,
                 TodoTable.Cols.UUID + " = ?",
                 new String[]{uuidString});
-    }
-
-    private static ContentValues getContentValues(TodoItem todoItem) {
-        ContentValues values = new ContentValues();
-
-        values.put(TodoTable.Cols.UUID, todoItem.getID().toString());
-        values.put(TodoTable.Cols.TITLE, todoItem.getTitle());
-        values.put(TodoTable.Cols.DATE, todoItem.getDate().getTime());
-        values.put(TodoTable.Cols.COMPLETED, todoItem.isCompleted() ? 1 : 0);
-        values.put(TodoTable.Cols.DETAILS, todoItem.getDetails());
-
-        return values;
     }
 
     private TodoCursorWrapper queryTodoItems(String whereClause, String[] whereArgs) {

@@ -1,4 +1,4 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,12 +22,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rahobbs.todo.helpers.Feedback;
+import com.rahobbs.todo.R;
+import com.rahobbs.todo.helpers.TodoItem;
+import com.rahobbs.todo.helpers.TodoLab;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
-
-import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
 /**
  * Created by rachael on 2/1/16.

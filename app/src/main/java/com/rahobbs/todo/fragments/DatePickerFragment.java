@@ -1,4 +1,4 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 
+import com.rahobbs.todo.R;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,9 +23,8 @@ import java.util.GregorianCalendar;
  */
 public class DatePickerFragment extends DialogFragment {
 
-    private static final String ARG_DATE = "date";
     public static final String EXTRA_DATE = "com.rahobbs.todo.date";
-
+    private static final String ARG_DATE = "date";
     private DatePicker mDatePicker;
 
     public static DatePickerFragment newInstance(Date date){

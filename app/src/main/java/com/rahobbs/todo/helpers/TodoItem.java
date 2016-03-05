@@ -1,4 +1,4 @@
-package com.rahobbs.todo;
+package com.rahobbs.todo.helpers;
 
 import java.util.Date;
 import java.util.UUID;
