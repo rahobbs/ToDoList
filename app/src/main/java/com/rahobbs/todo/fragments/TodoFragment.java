@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
 import com.rahobbs.todo.helpers.TodoItem;
@@ -61,6 +62,7 @@ public class TodoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(getContext());
         UUID todoId = (UUID) getArguments().getSerializable(ARG_TODO_ID);
         setHasOptionsMenu(true);
 
