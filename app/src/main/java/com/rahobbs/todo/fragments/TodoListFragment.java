@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -170,7 +171,7 @@ public class TodoListFragment extends Fragment{
                     selectedItems.add(mTodo);
                     Log.v("tag", String.valueOf(getAdapterPosition()));
                     multiSelectMode = true;
-                    mListItem.setBackgroundColor(getResources().getColor(R.color.done_task));
+                    mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.done_task));
 
                     return true;    // <- set to true
                 }
@@ -183,7 +184,7 @@ public class TodoListFragment extends Fragment{
 
             if (mTodo.getTitle() != null) {
                 mTitleTextView.setText(mTodo.getTitle().trim());
-                mListItem.setBackgroundColor(getResources().getColor(R.color.default_background_light));
+                mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.default_background_light));
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
@@ -195,11 +196,11 @@ public class TodoListFragment extends Fragment{
                     mTodo.setCompleted(isChecked);
 
                     if (isChecked) {
-                        mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                        mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
                         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     } else {
-                        mTitleTextView.setTextColor(getResources().getColor(R.color.darkFont));
+                        mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkFont));
                         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                         mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
@@ -210,10 +211,10 @@ public class TodoListFragment extends Fragment{
 
         public void updateCompleted() {
             if (mTodo.isCompleted()) {
-                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
                 mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                mTitleTextView.setTextColor(getResources().getColor(R.color.inactiveText));
+                mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
             }
         }
 
@@ -227,13 +228,13 @@ public class TodoListFragment extends Fragment{
             if (multiSelectMode) {
                 if (selectedItems.contains(mTodo)) {
                     selectedItems.remove(mTodo);
-                    mListItem.setBackgroundColor(getResources().getColor(R.color.default_background_light));
+                    mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), (R.color.default_background_light)));
                     if (selectedItems.isEmpty()) {
                         multiSelectMode = false;
                     }
                 } else {
                     selectedItems.add(mTodo);
-                    mListItem.setBackgroundColor(getResources().getColor(R.color.done_task));
+                    mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), (R.color.done_task)));
                 }
             }
         }
