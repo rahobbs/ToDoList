@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
+import com.rahobbs.todo.interfaces.OnStartDragListener;
 import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
 import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.helpers.TodoLab;
@@ -46,6 +49,7 @@ public class TodoListFragment extends Fragment{
     public List<TodoItem> selectedItems = new ArrayList<>();
     public Boolean multiSelectMode = false;
     private RecyclerView mTodoRecyclerView;
+    private ItemTouchHelper touchHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,7 @@ public class TodoListFragment extends Fragment{
 
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mTodoRecyclerView);
     }
 
@@ -259,9 +263,20 @@ public class TodoListFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(TodoHolder holder, int position) {
-            TodoItem todoItem = mTodoItems.get(position);
-            holder.bindTodo(todoItem);
-            holder.updateCompleted();
+            final TodoHolder mHolder = holder;
+                        TodoItem todoItem = mTodoItems.get(position);
+            mHolder.bindTodo(todoItem);
+            mHolder.updateCompleted();
+
+            mHolder.mHandle.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                        touchHelper.startDrag(mHolder);
+                    }
+                    return false;
+                }
+            });
+
         }
 
         @Override
