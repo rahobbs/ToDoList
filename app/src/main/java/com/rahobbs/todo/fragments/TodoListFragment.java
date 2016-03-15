@@ -27,7 +27,6 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
-import com.rahobbs.todo.interfaces.OnStartDragListener;
 import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
 import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.helpers.TodoLab;
