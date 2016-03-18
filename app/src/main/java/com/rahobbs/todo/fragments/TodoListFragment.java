@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -23,6 +24,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
@@ -291,9 +293,11 @@ public class TodoListFragment extends Fragment{
 
         @Override
         public void onItemDismiss(int position) {
-            /*
-            Swipe dismiss currently disabled.
-             */
+
+            //TODO Add undo Snackbar, then enable this in SimpleItemTouchHelper
+
+            TodoItem item = mTodoItems.get(position);
+            TodoLab.get(getActivity()).deleteTodoItem(item.getID());
         }
 
         @Override

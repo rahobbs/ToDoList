@@ -3,6 +3,7 @@ package com.rahobbs.todo.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -53,7 +54,6 @@ public class TodoFragment extends Fragment {
     public static TodoFragment newInstance(UUID todoId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_TODO_ID, todoId);
-
         TodoFragment fragment = new TodoFragment();
         fragment.setArguments(args);
         return fragment;
