@@ -12,10 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
         android:buttonTint="@color/accentLight"
         android:checked="false"
         android:paddingBottom="16dp"
-        android:paddingLeft="8dp"
+        android:paddingRight="4dp"
         android:paddingTop="8dp"
         android:scaleX="1.25"
         android:scaleY="1.25"/>
@@ -25,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/list_item_todo_completed_check_box"
-        android:layout_marginLeft="4dp"
         android:layout_toEndOf="@+id/list_item_todo_completed_check_box"
         android:layout_toLeftOf="@+id/reorder_handle"
         android:layout_toRightOf="@+id/list_item_todo_completed_check_box"
@@ -48,6 +48,7 @@
         android:layout_toEndOf="@+id/list_item_todo_completed_check_box"
         android:layout_toRightOf="@+id/list_item_todo_completed_check_box"
         android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
         android:text="@string/due_date_label"
         android:textColor="@color/inactiveText"
         android:textSize="12sp"/>

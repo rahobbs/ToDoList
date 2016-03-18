@@ -139,6 +139,7 @@ public class TodoListFragment extends Fragment{
             case R.id.multi_delete:
                 Log.v("Items to delete: ", selectedItems.toString());
                 deleteSelected(selectedItems);
+                multiSelectMode = false;
                 updateUI();
             default:
                 return super.onOptionsItemSelected(item);
