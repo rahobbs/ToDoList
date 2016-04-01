@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/todo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:capitalize="sentences"
+                android:minLines="2"
+                android:hint="@string/todo_title_hint"
+                android:focusable="true"
+                android:paddingTop="16dp"/>
+
+
+            <LinearLayout
+                android:id="@+id/dates_and_checks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/todo_title"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingBottom="4dp">
+
+                <LinearLayout
+                    android:id="@+id/date_components"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/calendar_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar"/>
+
+                    <TextView
+                        android:id="@+id/due_date_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/due_date_label"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:id="@+id/todo_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/darkFont"
+                        tools:text="Feb 19 2016"/>
+
+                </LinearLayout>
+
+
+                <CheckBox
+                    android:id="@+id/todo_completed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/todo_completed_label"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="end|center_vertical|center_horizontal"
+        android:text="Save"
+        android:textAlignment="center"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>
+
