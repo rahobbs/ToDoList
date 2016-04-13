@@ -3,8 +3,6 @@ package com.rahobbs.todo.interfaces;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
-
 /**
  * Class to control actions and callbacks between ItemTouchHelper and the application.
  */

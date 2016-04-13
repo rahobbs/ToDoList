@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by rachael on 2/2/16.
  * Creates an array list of the items to display
  */
 public class TodoLab {
@@ -52,10 +51,10 @@ public class TodoLab {
         mDatabase.insert(TodoTable.NAME, null, values);
     }
 
-    public void deleteTodoItem(UUID todoId){
+    public void deleteTodoItem(UUID todoId) {
         String uuidString = todoId.toString();
 
-        mDatabase.delete(TodoTable.NAME, TodoTable.Cols.UUID + " = ?", new String[] {uuidString});
+        mDatabase.delete(TodoTable.NAME, TodoTable.Cols.UUID + " = ?", new String[]{uuidString});
     }
 
     public List<TodoItem> getItems() {
@@ -63,13 +62,13 @@ public class TodoLab {
 
         TodoCursorWrapper cursor = queryTodoItems(null, null);
 
-        try{
+        try {
             cursor.moveToFirst();
-            while(!cursor.isAfterLast()){
+            while (!cursor.isAfterLast()) {
                 todoItems.add(cursor.getTodoItem());
                 cursor.moveToNext();
             }
-        } finally{
+        } finally {
             cursor.close();
         }
         return todoItems;
@@ -78,17 +77,17 @@ public class TodoLab {
     public TodoItem getItem(UUID id) {
         TodoCursorWrapper cursor = queryTodoItems(
                 TodoTable.Cols.UUID + " = ?",
-                new String[] {id.toString()}
+                new String[]{id.toString()}
         );
 
-        try{
-            if(cursor.getCount() == 0){
+        try {
+            if (cursor.getCount() == 0) {
                 return null;
             }
 
             cursor.moveToFirst();
             return cursor.getTodoItem();
-        } finally{
+        } finally {
             cursor.close();
         }
 

@@ -2,9 +2,6 @@ package com.rahobbs.todo.interfaces;
 
 import android.support.v7.widget.RecyclerView;
 
-/**
- * Created by rachael on 3/4/16.
- */
 public interface OnStartDragListener {
 
     /**

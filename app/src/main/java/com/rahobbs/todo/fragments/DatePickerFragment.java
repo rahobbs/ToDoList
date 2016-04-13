@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by rachael on 2/5/16.
  * Dialog fragment to control date picker
  */
 public class DatePickerFragment extends DialogFragment {
@@ -27,7 +26,7 @@ public class DatePickerFragment extends DialogFragment {
     private static final String ARG_DATE = "date";
     private DatePicker mDatePicker;
 
-    public static DatePickerFragment newInstance(Date date){
+    public static DatePickerFragment newInstance(Date date) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_DATE, date);
 
@@ -38,7 +37,7 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Date date = (Date)getArguments().getSerializable(ARG_DATE);
+        Date date = (Date) getArguments().getSerializable(ARG_DATE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
@@ -67,8 +66,8 @@ public class DatePickerFragment extends DialogFragment {
                 .create();
     }
 
-    private void sendResult(int resultCode, Date date){
-        if(getTargetFragment() == null){
+    private void sendResult(int resultCode, Date date) {
+        if (getTargetFragment() == null) {
             return;
         }
         Intent intent = new Intent();

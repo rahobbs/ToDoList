@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by rachael on 2/1/16.
  * Model for a single to-do item
  */
 public class TodoItem {

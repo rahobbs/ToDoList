@@ -24,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
@@ -42,10 +41,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by rachael on 2/2/16.
  * Fragment that contains the list of to-do items
  */
-public class TodoListFragment extends Fragment{
+public class TodoListFragment extends Fragment {
 
     public List<TodoItem> selectedItems = new ArrayList<>();
     public Boolean multiSelectMode = false;
@@ -266,7 +264,7 @@ public class TodoListFragment extends Fragment{
         @Override
         public void onBindViewHolder(TodoHolder holder, int position) {
             final TodoHolder mHolder = holder;
-                        TodoItem todoItem = mTodoItems.get(position);
+            TodoItem todoItem = mTodoItems.get(position);
             mHolder.bindTodo(todoItem);
             mHolder.updateCompleted();
 

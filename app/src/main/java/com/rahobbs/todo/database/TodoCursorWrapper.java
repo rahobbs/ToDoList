@@ -10,15 +10,14 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by rachael on 2/9/16.
  * Delegates calls to Cursor object
  */
 public class TodoCursorWrapper extends CursorWrapper {
-    public TodoCursorWrapper(Cursor cursor){
+    public TodoCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
-    public TodoItem getTodoItem(){
+    public TodoItem getTodoItem() {
         String uuidString = getString(getColumnIndex(TodoTable.Cols.UUID));
         String title = getString(getColumnIndex(TodoTable.Cols.TITLE));
         long date = getLong(getColumnIndex(TodoTable.Cols.DATE));

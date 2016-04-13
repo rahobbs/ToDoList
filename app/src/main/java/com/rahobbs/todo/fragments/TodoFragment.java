@@ -3,7 +3,6 @@ package com.rahobbs.todo.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -35,7 +34,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Created by rachael on 2/1/16.
  * Fragment that contains a single to-do item detailed view
  */
 public class TodoFragment extends Fragment {
@@ -46,7 +44,6 @@ public class TodoFragment extends Fragment {
 
     private TodoItem mTodo;
     private EditText mTitle;
-    private EditText mDetails;
     private TextView mDueDateTextField;
     private CheckBox mCompletedCheckbox;
     private LinearLayout mDateComponents;

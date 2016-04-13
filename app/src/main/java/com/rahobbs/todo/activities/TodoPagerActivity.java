@@ -21,21 +21,21 @@ import java.util.UUID;
  * Created by rachael on 2/5/16.
  * Activity for ViewPager of to-do item details
  */
-public class TodoPagerActivity extends AppCompatActivity{
+public class TodoPagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_TODO_ID = "com.rahobbs.todo.todo_id";
 
     private ViewPager mViewPager;
     private List<TodoItem> mItemList;
 
-    public static Intent newIntent(Context packageContext, UUID todoId){
+    public static Intent newIntent(Context packageContext, UUID todoId) {
         Intent intent = new Intent(packageContext, TodoPagerActivity.class);
         intent.putExtra(EXTRA_TODO_ID, todoId);
         return intent;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_pager);
 
@@ -58,8 +58,8 @@ public class TodoPagerActivity extends AppCompatActivity{
             }
         });
 
-        for (int i = 0; i <mItemList.size(); i++){
-            if (mItemList.get(i).getID().equals(todoId)){
+        for (int i = 0; i < mItemList.size(); i++) {
+            if (mItemList.get(i).getID().equals(todoId)) {
                 mViewPager.setCurrentItem(i);
                 break;
             }

@@ -7,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.rahobbs.todo.R;
 
-import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
-
 /**
- * Created by rachael on 2/2/16.
  * Defines an abstract activity to host a single fragment
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
