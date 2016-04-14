@@ -2,6 +2,7 @@ package com.rahobbs.todo.interfaces;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 /**
  * Class to control actions and callbacks between ItemTouchHelper and the application.
@@ -9,6 +10,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
+    private Integer mFrom = null;
+    private Integer mTo = null;
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
@@ -34,8 +37,22 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
+        if (viewHolder.getItemViewType() != target.getItemViewType()){
+            return false;
+        }
+        if (mFrom == null){
+            mFrom = viewHolder.getAdapterPosition();
+        }
+        mTo = target.getAdapterPosition();
+        Log.v("moved to position ", mTo.toString());
+
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
+        //TODO
     }
 
     @Override
