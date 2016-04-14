@@ -25,6 +25,7 @@ public class TodoCursorWrapper extends CursorWrapper {
         String details = getString(getColumnIndex(TodoTable.Cols.DETAILS));
         String parents = getString(getColumnIndex(TodoTable.Cols.PARENTS));
         String children = getString(getColumnIndex(TodoTable.Cols.CHILDREN));
+        int position = getInt(getColumnIndex(TodoTable.Cols.POSITION));
 
 
         TodoItem todoItem = new TodoItem(UUID.fromString(uuidString));
@@ -34,6 +35,7 @@ public class TodoCursorWrapper extends CursorWrapper {
         todoItem.setDetails(details);
         todoItem.setParents(parents);
         todoItem.setChildren(children);
+        todoItem.setPosition(position);
 
         return todoItem;
     }

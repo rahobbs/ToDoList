@@ -1,5 +1,6 @@
 package com.rahobbs.todo.helpers;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class TodoItem {
     private boolean completed;
     private String mParents;
     private String mChildren;
-
+    private int mPosition;
 
     public TodoItem() {
         mID = UUID.randomUUID();
@@ -24,6 +25,14 @@ public class TodoItem {
     public TodoItem(UUID id) {
         mID = id;
         mDate = new Date();
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
     }
 
     public boolean isCompleted() {
@@ -83,5 +92,11 @@ public class TodoItem {
 
     public void setChildren(String children) {
         mChildren = children;
+    }
+
+    public static class PositionComparator implements Comparator<TodoItem> {
+        public int compare(TodoItem item1, TodoItem item2) {
+            return item1.getPosition() - item2.getPosition();
+        }
     }
 }

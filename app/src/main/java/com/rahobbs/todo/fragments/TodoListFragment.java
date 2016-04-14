@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
@@ -49,6 +48,7 @@ public class TodoListFragment extends Fragment {
     public Boolean multiSelectMode = false;
     private RecyclerView mTodoRecyclerView;
     private ItemTouchHelper touchHelper;
+    private int listSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,7 @@ public class TodoListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TodoItem todoItem = new TodoItem();
+                todoItem.setPosition(listSize + 1);
                 TodoLab.get(getActivity()).addTodoItem(todoItem);
                 Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
                 startActivity(intent);
@@ -90,6 +91,11 @@ public class TodoListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
+        listSize = todoItems.size();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
+        for (TodoItem i : todoItems){
+            Log.e("item/position", i.getTitle() + ":" + i.getPosition());
+        }
         TodoListAdapter adapter = new TodoListAdapter(todoItems);
         recyclerView.setAdapter(adapter);
 
@@ -102,6 +108,7 @@ public class TodoListFragment extends Fragment {
     private void updateUI() {
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
 
         TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
         if (recyclerAdapter == null) {
@@ -159,6 +166,7 @@ public class TodoListFragment extends Fragment {
         public CheckBox mCompletedCheckBox;
         public RelativeLayout mListItem;
         public ImageView mHandle;
+        public int mPosition;
         private TodoItem mTodo;
 
         public TodoHolder(View itemView) {
@@ -171,6 +179,7 @@ public class TodoListFragment extends Fragment {
             mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
             mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
             mHandle = (ImageView) itemView.findViewById(R.id.reorder_handle);
+            mPosition = getAdapterPosition();
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
@@ -310,6 +319,12 @@ public class TodoListFragment extends Fragment {
                 }
             }
             notifyItemMoved(fromPosition, toPosition);
+
+            for (TodoItem i : mTodoItems){
+                i.setPosition(mTodoItems.indexOf(i));
+                Log.e("Item/Position", i.getTitle() +"/" + i.getPosition());
+                TodoLab.get(getActivity()).updateItem(i);
+            }
             return true;
         }
     }

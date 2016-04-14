@@ -41,6 +41,7 @@ public class TodoLab {
         values.put(TodoTable.Cols.DATE, todoItem.getDate().getTime());
         values.put(TodoTable.Cols.COMPLETED, todoItem.isCompleted() ? 1 : 0);
         values.put(TodoTable.Cols.DETAILS, todoItem.getDetails());
+        values.put(TodoTable.Cols.POSITION, todoItem.getPosition());
 
         return values;
     }

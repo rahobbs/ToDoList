@@ -11,7 +11,7 @@ import com.rahobbs.todo.database.TodoSchema.TodoTable;
  * Helper class to manage database creation and version management
  */
 public class TodoBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
     private static final String DATABASE_NAME = "todoBase.db";
 
     public TodoBaseHelper(Context context) {
@@ -27,7 +27,8 @@ public class TodoBaseHelper extends SQLiteOpenHelper {
                 TodoTable.Cols.COMPLETED + "," +
                 TodoTable.Cols.DETAILS + "," +
                 TodoTable.Cols.PARENTS + "," +
-                TodoTable.Cols.CHILDREN + ")"
+                TodoTable.Cols.CHILDREN + "," +
+                TodoTable.Cols.POSITION + ")"
         );
     }
 
@@ -36,10 +37,18 @@ public class TodoBaseHelper extends SQLiteOpenHelper {
         String addDetails = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN DETAILS TEXT";
         String addParents = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN PARENTS TEXT";
         String addChildren = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN CHILDREN TEXT";
-        if (oldVersion == 1 && newVersion == 2)
+        String addPosition = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN POSITION TEXT";
+
+        if (oldVersion == 1 && newVersion == 2) {
             db.execSQL(addDetails);
-        db.execSQL(addParents);
-        db.execSQL(addChildren);
-        Log.v("DB Update", "Updated from Schema " + oldVersion + " to " + newVersion);
+            db.execSQL(addParents);
+            db.execSQL(addChildren);
+            Log.v("DB Update", "Updated from Schema " + oldVersion + " to " + newVersion);
+        }
+        if (oldVersion < 4 && newVersion == 4) {
+            db.execSQL(addPosition);
+            Log.v("DB Update", "Updated from Schema " + oldVersion + " to " + newVersion);
+        }
     }
+
 }
