@@ -8,8 +8,8 @@ android {
         applicationId "com.rahobbs.todo"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 16
-        versionName "2.0.7"
+        versionCode 17
+        versionName "2.5.0"
     }
     buildTypes {
         release {
