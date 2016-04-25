@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,7 +67,6 @@ public class TodoFragment extends Fragment {
         }
 
         mTodo = TodoLab.get(getActivity()).getItem(todoId);
-        Log.v("DETAIL_CREATED", mTodo.getID().toString());
 
         if (mTodo == null) {
             throw new RuntimeException("No Todo item with provided ID (" + todoId.toString() + ") was found.");
@@ -115,7 +113,6 @@ public class TodoFragment extends Fragment {
     @Override
     public void onPause() {
         saveNewItem();
-        Log.v("DETAIL_PAUSE", mTodo.getID().toString());
         super.onPause();
     }
 
@@ -126,7 +123,6 @@ public class TodoFragment extends Fragment {
         }
 
         TodoLab.get(getActivity()).updateItem(mTodo);
-        Log.v("DETAIL_SAVE", mTodo.getID().toString());
     }
 
     @Override
@@ -191,7 +187,6 @@ public class TodoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveNewItem();
-                Log.v("DETAIL_CLICK_SAVE", mTodo.getID().toString());
                 getActivity().finish();
                 //navigateUpFromSameTask(getActivity());
             }

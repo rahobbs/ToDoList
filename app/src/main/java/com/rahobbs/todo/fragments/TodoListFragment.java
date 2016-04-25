@@ -10,7 +10,6 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -93,9 +92,6 @@ public class TodoListFragment extends Fragment {
         List<TodoItem> todoItems = todoLab.getItems();
         listSize = todoItems.size();
         Collections.sort(todoItems, new TodoItem.PositionComparator());
-        for (TodoItem i : todoItems){
-            Log.e("item/position", i.getTitle() + ":" + i.getPosition());
-        }
         TodoListAdapter adapter = new TodoListAdapter(todoItems);
         recyclerView.setAdapter(adapter);
 
@@ -144,7 +140,6 @@ public class TodoListFragment extends Fragment {
                 startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
             case R.id.multi_delete:
-                Log.v("Items to delete: ", selectedItems.toString());
                 deleteSelected(selectedItems);
                 multiSelectMode = false;
                 updateUI();
@@ -184,7 +179,6 @@ public class TodoListFragment extends Fragment {
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
                     selectedItems.add(mTodo);
-                    Log.v("tag", String.valueOf(getAdapterPosition()));
                     multiSelectMode = true;
                     mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.done_task));
 
@@ -235,7 +229,6 @@ public class TodoListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.v("tag", String.valueOf(getAdapterPosition()));
             if (!multiSelectMode) {
                 Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
                 startActivity(intent);
@@ -322,7 +315,6 @@ public class TodoListFragment extends Fragment {
 
             for (TodoItem i : mTodoItems){
                 i.setPosition(mTodoItems.indexOf(i));
-                Log.e("Item/Position", i.getTitle() +"/" + i.getPosition());
                 TodoLab.get(getActivity()).updateItem(i);
             }
             return true;
