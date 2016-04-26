@@ -44,7 +44,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             mFrom = viewHolder.getAdapterPosition();
         }
         mTo = target.getAdapterPosition();
-        Log.v("moved to position ", mTo.toString());
 
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;

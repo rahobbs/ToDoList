@@ -361,7 +361,6 @@ public class TodoListFragment extends Fragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Log.v("Action: ", "onDestroyActionMode() called");
             multiSelectMode = false;
         }
     };
