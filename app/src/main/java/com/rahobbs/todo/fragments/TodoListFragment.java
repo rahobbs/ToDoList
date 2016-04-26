@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Fragment that contains the list of to-do items
@@ -322,6 +321,7 @@ public class TodoListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     TodoLab.get(getActivity()).addTodoItem(copyItem);
+                    copyItem.setPosition(copyItem.getPosition());
                     updateUI();
                 }
             }).show();
