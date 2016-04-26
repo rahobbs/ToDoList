@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -50,6 +51,7 @@ public class TodoListFragment extends Fragment {
     private RecyclerView mTodoRecyclerView;
     private ItemTouchHelper touchHelper;
     private int listSize;
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class TodoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
-
+        rootView = view;
         mTodoRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         mTodoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -126,9 +128,6 @@ public class TodoListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (multiSelectMode) {
-            inflater.inflate(R.menu.fragment_todo_list_action, menu);
-        }
         inflater.inflate(R.menu.fragment_todo_list, menu);
     }
 
@@ -141,10 +140,6 @@ public class TodoListFragment extends Fragment {
                 fb.sendFeedback(i);
                 startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
-            case R.id.multi_delete:
-                deleteSelected(selectedItems);
-                multiSelectMode = false;
-                updateUI();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -371,11 +366,13 @@ public class TodoListFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.multi_delete:
                     deleteSelected(selectedItems);
+                    //TODO get snackbar working
+                    //Snackbar.make(rootView, "text here", Snackbar.LENGTH_LONG);
                     updateUI();
                     mode.finish();
                     return true;
-/*                TODO get this working
-                    case R.id.multi_check:
+/*              TODO get this working
+                case R.id.multi_check:
                     updateUI();
                     mode.finish();
                     return true;*/

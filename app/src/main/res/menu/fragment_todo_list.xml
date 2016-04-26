@@ -6,8 +6,4 @@
         android:title="@string/send_feedback"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/multi_delete"
-        android:title="Delete Items"
-        app:showAsAction="never"/>
 </menu>

@@ -113,7 +113,6 @@ public class TodoLab {
                 null,
                 null
         );
-
         return new TodoCursorWrapper(cursor);
     }
 }
