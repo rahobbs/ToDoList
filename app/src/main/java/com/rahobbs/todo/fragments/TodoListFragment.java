@@ -10,6 +10,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -164,6 +165,7 @@ public class TodoListFragment extends Fragment {
         public ImageView mHandle;
         public int mPosition;
         private TodoItem mTodo;
+        public ActionMode mActionMode;
 
         public TodoHolder(View itemView) {
             super(itemView);
@@ -179,9 +181,10 @@ public class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
+
                     selectedItems.add(mTodo);
                     multiSelectMode = true;
-                    getActivity().startActionMode(mActionModeCallback);
+                    mActionMode = getActivity().startActionMode(mActionModeCallback);
                     mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.done_task));
 
                     return true;    // <- set to true
@@ -240,7 +243,7 @@ public class TodoListFragment extends Fragment {
                     selectedItems.remove(mTodo);
                     mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), (R.color.default_background_light)));
                     if (selectedItems.isEmpty()) {
-                        multiSelectMode = false;
+                        mActionMode.finish();
                     }
                 } else {
                     selectedItems.add(mTodo);
@@ -315,7 +318,7 @@ public class TodoListFragment extends Fragment {
             }
             notifyItemMoved(fromPosition, toPosition);
 
-            for (TodoItem i : mTodoItems){
+            for (TodoItem i : mTodoItems) {
                 i.setPosition(mTodoItems.indexOf(i));
                 TodoLab.get(getActivity()).updateItem(i);
             }
@@ -347,7 +350,6 @@ public class TodoListFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.multi_delete:
                     deleteSelected(selectedItems);
-                    multiSelectMode = false;
                     updateUI();
                     mode.finish();
                     return true;
@@ -359,6 +361,7 @@ public class TodoListFragment extends Fragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            Log.v("Action: ", "onDestroyActionMode() called");
             multiSelectMode = false;
         }
     };
