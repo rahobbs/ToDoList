@@ -188,7 +188,6 @@ public class TodoFragment extends Fragment {
             public void onClick(View v) {
                 saveNewItem();
                 getActivity().finish();
-                //navigateUpFromSameTask(getActivity());
             }
         });
         return v;

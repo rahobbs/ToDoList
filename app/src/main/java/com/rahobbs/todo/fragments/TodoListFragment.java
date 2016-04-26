@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Fragment that contains the list of to-do items
@@ -167,7 +168,7 @@ public class TodoListFragment extends Fragment {
         private TodoItem mTodo;
         public ActionMode mActionMode;
 
-        public TodoHolder(View itemView) {
+        public TodoHolder(final View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
@@ -181,7 +182,6 @@ public class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-
                     selectedItems.add(mTodo);
                     multiSelectMode = true;
                     mActionMode = getActivity().startActionMode(mActionModeCallback);
@@ -210,13 +210,9 @@ public class TodoListFragment extends Fragment {
                     mTodo.setCompleted(isChecked);
 
                     if (isChecked) {
-                        mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
-                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        checkItem();
                     } else {
-                        mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkFont));
-                        mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        unCheckItem();
                     }
                     TodoLab.get(getActivity()).updateItem(mTodo);
                 }
@@ -225,10 +221,7 @@ public class TodoListFragment extends Fragment {
 
         public void updateCompleted() {
             if (mTodo.isCompleted()) {
-                mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
-                mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
+                checkItem();
             }
         }
 
@@ -242,13 +235,34 @@ public class TodoListFragment extends Fragment {
                 if (selectedItems.contains(mTodo)) {
                     selectedItems.remove(mTodo);
                     mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), (R.color.default_background_light)));
-                    if (selectedItems.isEmpty()) {
+                    if (selectedItems.isEmpty() && mActionMode != null) {
                         mActionMode.finish();
                     }
                 } else {
                     selectedItems.add(mTodo);
                     mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), (R.color.done_task)));
                 }
+            }
+        }
+
+        private void checkItem() {
+            mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
+            mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.inactiveText));
+
+            if (!mTodo.isCompleted()) {
+                mTodo.setCompleted(true);
+            }
+        }
+
+        private void unCheckItem() {
+            mTitleTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkFont));
+            mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+            if (mTodo.isCompleted()) {
+                mTodo.setCompleted(false);
             }
         }
     }
@@ -299,10 +313,18 @@ public class TodoListFragment extends Fragment {
         @Override
         public void onItemDismiss(int position) {
 
-            //TODO Add undo Snackbar, then enable this in SimpleItemTouchHelper
-
             TodoItem item = mTodoItems.get(position);
+            final TodoItem copyItem = item;
             TodoLab.get(getActivity()).deleteTodoItem(item.getID());
+            updateUI();
+
+            Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodoLab.get(getActivity()).addTodoItem(copyItem);
+                    updateUI();
+                }
+            }).show();
         }
 
         @Override
@@ -327,7 +349,6 @@ public class TodoListFragment extends Fragment {
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -353,6 +374,11 @@ public class TodoListFragment extends Fragment {
                     updateUI();
                     mode.finish();
                     return true;
+/*                TODO get this working
+                    case R.id.multi_check:
+                    updateUI();
+                    mode.finish();
+                    return true;*/
                 default:
                     return false;
             }
