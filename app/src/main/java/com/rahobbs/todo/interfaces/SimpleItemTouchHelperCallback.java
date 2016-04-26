@@ -52,6 +52,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
         //TODO
+        super.clearView(recyclerView, viewHolder);
     }
 
     @Override
