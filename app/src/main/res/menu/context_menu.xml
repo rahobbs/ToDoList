@@ -7,8 +7,8 @@
         android:icon="@drawable/ic_menu_delete"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/multi_check"
-        android:title="Check Items"
-        android:icon="@drawable/ic_menu_check"
+        android:id="@+id/close_menu"
+        android:title="Close"
+        android:icon="@drawable/ic_close_menu"
         app:showAsAction="always"/>
 </menu>

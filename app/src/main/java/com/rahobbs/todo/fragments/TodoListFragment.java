@@ -371,11 +371,12 @@ public class TodoListFragment extends Fragment {
                     updateUI();
                     mode.finish();
                     return true;
-/*              TODO get this working
-                case R.id.multi_check:
+                case R.id.close_menu:
+                    multiSelectMode = false;
                     updateUI();
                     mode.finish();
-                    return true;*/
+
+                    return true;
                 default:
                     return false;
             }
@@ -385,6 +386,7 @@ public class TodoListFragment extends Fragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             multiSelectMode = false;
+            updateUI();
         }
     };
 }
