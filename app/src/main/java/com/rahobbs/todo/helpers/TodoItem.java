@@ -1,5 +1,6 @@
 package com.rahobbs.todo.helpers;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
@@ -7,7 +8,7 @@ import java.util.UUID;
 /**
  * Model for a single to-do item
  */
-public class TodoItem {
+public class TodoItem implements Serializable {
     private String mTitle;
     private String mDetails;
     private Date mDate;

@@ -1,5 +1,6 @@
 package com.rahobbs.todo.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +37,7 @@ import com.rahobbs.todo.helpers.TodoLab;
 import com.rahobbs.todo.activities.TodoPagerActivity;
 import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,6 +86,23 @@ public class TodoListFragment extends Fragment {
         updateUI();
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == 1){
+            if (resultCode == Activity.RESULT_OK){
+                final TodoItem item = (TodoItem) data.getSerializableExtra("item");
+                Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TodoLab.get(getActivity()).addTodoItem(item);
+                        item.setPosition(item.getPosition());
+                        updateUI();
+                    }
+                }).show();
+            }
+        }
     }
 
     @Override
@@ -223,7 +243,7 @@ public class TodoListFragment extends Fragment {
         public void onClick(View v) {
             if (!multiSelectMode) {
                 Intent intent = TodoPagerActivity.newIntent(getActivity(), mTodo.getID());
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
             if (multiSelectMode) {
                 if (selectedItems.contains(mTodo)) {

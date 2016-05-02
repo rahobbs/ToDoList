@@ -38,6 +38,8 @@ import java.util.UUID;
 public class TodoFragment extends Fragment {
 
     private static final String ARG_TODO_ID = "todoId";
+    private static final String ARG_WAS_DELETED = "deleted";
+    private static boolean wasDeleted = false;
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
 
@@ -50,6 +52,7 @@ public class TodoFragment extends Fragment {
     public static TodoFragment newInstance(UUID todoId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_TODO_ID, todoId);
+        args.putSerializable(ARG_WAS_DELETED, wasDeleted);
         TodoFragment fragment = new TodoFragment();
         fragment.setArguments(args);
         return fragment;
@@ -90,20 +93,12 @@ public class TodoFragment extends Fragment {
                 return true;
             case R.id.menu_item_delete_todo:
                 UUID todoId = mTodo.getID();
+                TodoItem tempItem = mTodo;
                 TodoLab.get(getActivity()).deleteTodoItem(todoId);
+                Intent intent = new Intent();
+                intent.putExtra("item", tempItem);
+                getActivity().setResult(Activity.RESULT_OK, intent);
 
-                String titleToDisplay;
-                if (mTodo.getTitle() == null) {
-                    titleToDisplay = "Unnamed task";
-                } else if (mTodo.getTitle().length() > 25) {
-                    titleToDisplay = "\"" + mTodo.getTitle().trim().substring(0, 25) + "\"";
-                } else {
-                    titleToDisplay = "\"" + mTodo.getTitle().trim() + "\"";
-                }
-
-                Toast.makeText(getActivity(),
-                        titleToDisplay + " deleted",
-                        Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             default:
                 return super.onOptionsItemSelected(item);

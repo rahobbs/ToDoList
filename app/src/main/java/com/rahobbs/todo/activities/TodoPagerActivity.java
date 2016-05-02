@@ -27,6 +27,7 @@ public class TodoPagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<TodoItem> mItemList;
+    private boolean wasDeleted;
 
     public static Intent newIntent(Context packageContext, UUID todoId) {
         Intent intent = new Intent(packageContext, TodoPagerActivity.class);
