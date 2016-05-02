@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/share_list"
+        android:title="Share List"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_share_list"/>
+    <item
         android:id="@+id/menu_item_send_feedback"
         android:title="@string/send_feedback"
         app:showAsAction="never"/>

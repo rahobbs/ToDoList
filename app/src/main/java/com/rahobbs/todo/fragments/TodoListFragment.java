@@ -155,6 +155,17 @@ public class TodoListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.share_list:
+                Intent listIntent = new Intent(Intent.ACTION_SEND);
+                List<TodoItem> list = TodoLab.get(getActivity()).getItems();
+                List<String> titles = new ArrayList<String>();
+                for (TodoItem todoitem : list){
+                    titles.add(todoitem.getTitle());
+                }
+                listIntent.setType("text/plain");
+                listIntent.putExtra(Intent.EXTRA_TEXT, titles.toString());
+                startActivity(Intent.createChooser(listIntent, "Send list..."));
+                return true;
             case R.id.menu_item_send_feedback:
                 Intent i = new Intent(Intent.ACTION_SEND);
                 Feedback fb = new Feedback();
