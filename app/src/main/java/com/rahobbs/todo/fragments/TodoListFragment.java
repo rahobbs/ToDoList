@@ -385,9 +385,20 @@ public class TodoListFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.multi_delete:
+                    Snackbar.make(getView(), "Deleting " + selectedItems.size() + " items", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            List<TodoItem> copySelected = selectedItems;
+                            for (TodoItem i : copySelected){
+                                TodoLab.get(getActivity()).addTodoItem(i);
+                                i.setPosition(i.getPosition());
+
+                            }
+                            updateUI();
+                        }
+                    }).show();
+
                     deleteSelected(selectedItems);
-                    //TODO get snackbar working
-                    //Snackbar.make(rootView, "text here", Snackbar.LENGTH_LONG);
                     updateUI();
                     mode.finish();
                     return true;
