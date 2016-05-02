@@ -12,6 +12,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -211,7 +212,12 @@ public class TodoListFragment extends Fragment {
             mTodo = todo;
 
             if (mTodo.getTitle() != null) {
-                mTitleTextView.setText(mTodo.getTitle().trim());
+                String title = mTodo.getTitle();
+                if (title.contains("\n")){
+                    title = mTodo.getTitle().replaceFirst("\n", ": ");
+                    title = title.replace("\n", "");
+                }
+                mTitleTextView.setText(title.trim());
                 mListItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.default_background_light));
             }
 

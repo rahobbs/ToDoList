@@ -2,10 +2,9 @@
     <string name="app_name">The Round File</string>
     <string name="todo_title_label">Title</string>
     <string name="todo_title_hint">Enter your task</string>
-    <string name="todo_date_label">Due Date</string>
     <string name="todo_completed_label">Completed</string>
     <string name="date_picker_title">Due date</string>
     <string name="delete_todo">Delete Item</string>
     <string name="send_feedback">Send Feedback</string>
-    <string name="due_date_label">Due Date:</string>
+    <string name="due_date_label">Due Date: </string>
 </resources>

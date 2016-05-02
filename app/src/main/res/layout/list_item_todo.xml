@@ -71,6 +71,7 @@
         android:layout_toEndOf="@+id/due_date_label"
         android:layout_toRightOf="@+id/due_date_label"
         android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
         android:textColor="@color/inactiveText"
         android:textSize="12sp"
         tools:text="Thu 18 Feb 2016"/>
