@@ -56,6 +56,64 @@ public class TodoListFragment extends Fragment {
     private ItemTouchHelper touchHelper;
     private int listSize;
     private View rootView;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.context_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.multi_delete:
+                    final List<TodoItem> copySelected = selectedItems;
+                    deleteSelected(selectedItems);
+                    updateUI();
+
+                    Snackbar.make(getView(), "Deleting " + selectedItems.size() + " items",
+                            Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            for (TodoItem i : copySelected) {
+                                TodoLab.get(getActivity()).addTodoItem(i);
+                                i.setPosition(i.getPosition());
+                            }
+                            selectedItems.clear();
+                            updateUI();
+                        }
+                    }).show();
+                    updateUI();
+                    mode.finish();
+                    return true;
+                case R.id.close_menu:
+                    updateUI();
+                    mode.finish();
+                    selectedItems.clear();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            multiSelectMode = false;
+            updateUI();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,9 +148,9 @@ public class TodoListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == 1){
-            if (resultCode == Activity.RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
                 final TodoItem item = (TodoItem) data.getSerializableExtra("item");
                 Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                     @Override
@@ -159,7 +217,7 @@ public class TodoListFragment extends Fragment {
                 Intent listIntent = new Intent(Intent.ACTION_SEND);
                 List<TodoItem> list = TodoLab.get(getActivity()).getItems();
                 List<String> titles = new ArrayList<String>();
-                for (TodoItem todoitem : list){
+                for (TodoItem todoitem : list) {
                     titles.add(todoitem.getTitle());
                 }
                 listIntent.setType("text/plain");
@@ -191,8 +249,8 @@ public class TodoListFragment extends Fragment {
         public RelativeLayout mListItem;
         public ImageView mHandle;
         public int mPosition;
-        private TodoItem mTodo;
         public ActionMode mActionMode;
+        private TodoItem mTodo;
 
         public TodoHolder(final View itemView) {
             super(itemView);
@@ -208,6 +266,9 @@ public class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
+                    if(!multiSelectMode){
+                        selectedItems.clear();
+                    }
                     selectedItems.add(mTodo);
                     multiSelectMode = true;
                     mActionMode = getActivity().startActionMode(mActionModeCallback);
@@ -224,7 +285,7 @@ public class TodoListFragment extends Fragment {
 
             if (mTodo.getTitle() != null) {
                 String title = mTodo.getTitle();
-                if (title.contains("\n")){
+                if (title.contains("\n")) {
                     title = mTodo.getTitle().replaceFirst("\n", ": ");
                     title = title.replace("\n", "");
                 }
@@ -379,62 +440,4 @@ public class TodoListFragment extends Fragment {
             return true;
         }
     }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.multi_delete:
-                    Snackbar.make(getView(), "Deleting " + selectedItems.size() + " items", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            List<TodoItem> copySelected = selectedItems;
-                            for (TodoItem i : copySelected){
-                                TodoLab.get(getActivity()).addTodoItem(i);
-                                i.setPosition(i.getPosition());
-
-                            }
-                            updateUI();
-                        }
-                    }).show();
-
-                    deleteSelected(selectedItems);
-                    updateUI();
-                    mode.finish();
-                    return true;
-                case R.id.close_menu:
-                    multiSelectMode = false;
-                    updateUI();
-                    mode.finish();
-
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            multiSelectMode = false;
-            updateUI();
-        }
-    };
 }
