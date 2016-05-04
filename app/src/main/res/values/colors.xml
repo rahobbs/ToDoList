@@ -6,7 +6,7 @@
     <color name="accentLight">#00BCD4</color>
     <color name="darkFont">#212121</color>
     <color name="inactiveText">#727272</color>
-    <color name="done_task">#B6B6B6</color>
+    <color name="done_task">#6ab6b6b6</color>
     <color name="white">#ffffff</color>
     <color name="default_background_light">#fff3f3f3</color>
 </resources>
