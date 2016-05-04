@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:capitalize="sentences"
+                android:inputType="textCapSentences"
                 android:minLines="2"
                 android:hint="@string/todo_title_hint"
                 android:focusable="true"
@@ -32,7 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/todo_title"
-                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingBottom="4dp">
 
