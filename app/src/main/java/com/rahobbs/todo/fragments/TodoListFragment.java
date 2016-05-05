@@ -16,17 +16,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
 import com.rahobbs.todo.helpers.SharableList;
-import com.rahobbs.todo.helpers.TodoListAdapter;
 import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
 import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.helpers.TodoLab;
 import com.rahobbs.todo.activities.TodoPagerActivity;
+import com.rahobbs.todo.helpers.TodoListAdapter;
 
 import java.util.Collections;
 import java.util.List;
+
+//TODO: Reorder these classes to match the parent class
 
 /**
  * Fragment that contains the list of to-do items
@@ -34,12 +37,39 @@ import java.util.List;
 public class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecyclerView;
-    private int mListSize;
+    private int listSize;
 
-    /*
-     * Looks for "item deleted" result code from detail activity and displays undo snackbar
-     * if item was deleted.
-     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(getContext());
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
+        mTodoRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        mTodoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        FloatingActionButton addFab = (FloatingActionButton) view.findViewById(R.id.add_fab);
+
+        addFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TodoItem todoItem = new TodoItem();
+                todoItem.setPosition(listSize + 1);
+                TodoLab.get(getActivity()).addTodoItem(todoItem);
+                Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
+                startActivity(intent);
+            }
+        });
+
+        updateUI();
+
+        return view;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
@@ -58,33 +88,48 @@ public class TodoListFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        TodoLab todoLab = TodoLab.get(getActivity());
+        List<TodoItem> todoItems = todoLab.getItems();
+        listSize = todoItems.size();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
+        TodoListAdapter adapter = new TodoListAdapter(todoItems, getContext(), getView(), getActivity());
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mTodoRecyclerView);
+    }
+
+    private void updateUI() {
+        TodoLab todoLab = TodoLab.get(getActivity());
+        List<TodoItem> todoItems = todoLab.getItems();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
+
+        TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
+        if (recyclerAdapter == null) {
+            mTodoRecyclerView.setAdapter(new TodoListAdapter(todoItems, getContext(), getView(), getActivity()));
+        } else {
+            recyclerAdapter.setTodoItems(todoItems);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_todo_list, menu);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
-        mTodoRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
-        mTodoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        FloatingActionButton addFab = (FloatingActionButton) view.findViewById(R.id.add_fab);
-
-        addFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodoItem todoItem = new TodoItem();
-                todoItem.setPosition(mListSize + 1);
-                TodoLab.get(getActivity()).addTodoItem(todoItem);
-                Intent intent = TodoPagerActivity.newIntent(getActivity(), todoItem.getID());
-                startActivity(intent);
-            }
-        });
-
-        updateUI();
-        return view;
     }
 
     @Override
@@ -106,45 +151,9 @@ public class TodoListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
-        mListSize = todoItems.size();
-        Collections.sort(todoItems, new TodoItem.PositionComparator());
-        TodoListAdapter adapter = new TodoListAdapter(todoItems);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(adapter);
-        ItemTouchHelper mTouchHelper = new ItemTouchHelper(callback);
-        mTouchHelper.attachToRecyclerView(mTodoRecyclerView);
-    }
-    /*
-    * Updates the RecyclerView UI after data has changed. This includes sorting TodoItems by their
-    * positions as specified in the database.
-    */
-    public void updateUI() {
-        TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
-        Collections.sort(todoItems, new TodoItem.PositionComparator());
-
-        TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
-        if (recyclerAdapter == null) {
-            mTodoRecyclerView.setAdapter(new TodoListAdapter(todoItems));
-        } else {
-            recyclerAdapter.setTodoItems(todoItems);
+    public void deleteSelected(List<TodoItem> selectedItems) {
+        for (TodoItem i : selectedItems) {
+            TodoLab.get(getActivity()).deleteTodoItem(i.getID());
         }
     }
 }

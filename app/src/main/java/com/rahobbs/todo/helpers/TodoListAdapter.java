@@ -1,5 +1,7 @@
 package com.rahobbs.todo.helpers;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -14,21 +16,23 @@ import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Custom RecyclerView.Adapter. Implements ItemTouchHelperAdapter to handle drag and swipe events.
- */
 public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements ItemTouchHelperAdapter {
     private List<TodoItem> mTodoItems;
+    Context mContext;
+    View mView;
+    Activity mActivity;
 
-    public TodoListAdapter(List<TodoItem> todoItems) {
+    public TodoListAdapter(List<TodoItem> todoItems, Context context, View v, Activity activity) {
         mTodoItems = todoItems;
+        this.mContext = context;
+        this.mView = v;
+        this.mActivity = activity;
     }
 
     @Override
     public TodoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_todo, parent, false);
-        return new TodoHolder(view);
+        return new TodoHolder(view, parent.getContext(), mActivity);
     }
 
     @Override
@@ -41,7 +45,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
         mHolder.mHandle.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mTouchHelper.startDrag(mHolder);
+                    touchHelper.startDrag(mHolder);
                 }
                 return false;
             }
@@ -64,13 +68,13 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
 
         TodoItem item = mTodoItems.get(position);
         final TodoItem copyItem = item;
-        TodoLab.get(getActivity()).deleteTodoItem(item.getID());
+        TodoLab.get(mActivity).deleteTodoItem(item.getID());
         updateUI();
 
-        Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+        Snackbar.make(mView, "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TodoLab.get(getActivity()).addTodoItem(copyItem);
+                TodoLab.get(mActivity).addTodoItem(copyItem);
                 copyItem.setPosition(copyItem.getPosition());
                 updateUI();
             }
@@ -92,7 +96,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
 
         for (TodoItem i : mTodoItems) {
             i.setPosition(mTodoItems.indexOf(i));
-            TodoLab.get(getActivity()).updateItem(i);
+            TodoLab.get(mActivity).updateItem(i);
         }
         return true;
     }
