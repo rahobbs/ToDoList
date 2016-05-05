@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.rahobbs.todo.R;
 import com.rahobbs.todo.activities.TodoPagerActivity;
+import com.rahobbs.todo.fragments.TodoListFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,12 +45,14 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
     private List<TodoItem> selectedItems = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
+    private TodoListFragment mFragment;
 
-    public TodoHolder(final View itemView, Context context, Activity activity) {
+    public TodoHolder(final View itemView, Context context, Activity activity, TodoListFragment fragment) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.mContext = context;
         this.mActivity = activity;
+        this.mFragment = fragment;
 
         mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_todo_title_text_view);
         mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
@@ -74,6 +77,9 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         });
     }
 
+    /*
+    * Bind task data to the custom ViewHolder
+    */
     public void bindTodo(TodoItem todo) {
         SimpleDateFormat format = new SimpleDateFormat("E dd MMM yyyy", Locale.ENGLISH);
         mTodo = todo;
@@ -106,6 +112,9 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         });
     }
 
+    /*
+    * Update checkboxes to reflect whether the task has been completed.
+    */
     public void updateCompleted() {
         if (mTodo.isCompleted()) {
             checkItem();
@@ -132,6 +141,9 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         }
     }
 
+    /*
+    * Update checkbox UI and make sure the item's isCompleted() is set correctly
+    */
     private void checkItem() {
         mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.inactiveText));
         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -143,6 +155,9 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         }
     }
 
+    /*
+    * Update checkbox UI and make sure the item's isCompleted() is set correctly
+    */
     private void unCheckItem() {
         mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.darkFont));
         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -152,50 +167,49 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
             mTodo.setCompleted(false);
         }
     }
-}
+
+    /*
+    * Custom ActionMode.Callback to create Context Action Menu for selecting and modifying multiple
+    * items
+    */
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.context_menu, menu);
             return true;
         }
 
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
+            return false;
         }
 
-        // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.multi_delete:
                     final List<TodoItem> copySelected = selectedItems;
-                    deleteSelected(selectedItems);
-                    updateUI();
+                    mFragment.deleteSelected(selectedItems);
+                    mFragment.updateUI();
 
                     Snackbar.make(itemView, "Deleting " + selectedItems.size() + " items",
                             Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             for (TodoItem i : copySelected) {
-                                TodoLab.get(getActivity()).addTodoItem(i);
+                                TodoLab.get(mActivity).addTodoItem(i);
                                 i.setPosition(i.getPosition());
                             }
                             selectedItems.clear();
-                            updateUI();
+                            mFragment.updateUI();
                         }
                     }).show();
-                    updateUI();
+                    mFragment.updateUI();
                     mode.finish();
                     return true;
                 case R.id.close_menu:
-                    updateUI();
+                    mFragment.updateUI();
                     mode.finish();
                     selectedItems.clear();
                     return true;
@@ -204,11 +218,10 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
             }
         }
 
-        // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mMultiSelectMode = false;
-            updateUI();
+            mFragment.updateUI();
         }
     };
 }

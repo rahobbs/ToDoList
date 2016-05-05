@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.Firebase;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
 import com.rahobbs.todo.helpers.SharableList;
@@ -38,12 +37,38 @@ public class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecyclerView;
     private int listSize;
+    public ItemTouchHelper touchHelper;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                final TodoItem item = (TodoItem) data.getSerializableExtra("item");
+                if(getView()!= null){
+                    Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TodoLab.get(getActivity()).addTodoItem(item);
+                            item.setPosition(item.getPosition());
+                            updateUI();
+                        }
+                    }).show();
+                }
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Firebase.setAndroidContext(getContext());
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_todo_list, menu);
     }
 
     @Override
@@ -66,70 +91,7 @@ public class TodoListFragment extends Fragment {
         });
 
         updateUI();
-
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                final TodoItem item = (TodoItem) data.getSerializableExtra("item");
-                Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TodoLab.get(getActivity()).addTodoItem(item);
-                        item.setPosition(item.getPosition());
-                        updateUI();
-                    }
-                }).show();
-            }
-        }
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
-        listSize = todoItems.size();
-        Collections.sort(todoItems, new TodoItem.PositionComparator());
-        TodoListAdapter adapter = new TodoListAdapter(todoItems, getContext(), getView(), getActivity());
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mTodoRecyclerView);
-    }
-
-    private void updateUI() {
-        TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
-        Collections.sort(todoItems, new TodoItem.PositionComparator());
-
-        TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
-        if (recyclerAdapter == null) {
-            mTodoRecyclerView.setAdapter(new TodoListAdapter(todoItems, getContext(), getView(), getActivity()));
-        } else {
-            recyclerAdapter.setTodoItems(todoItems);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        inflater.inflate(R.menu.fragment_todo_list, menu);
     }
 
     @Override
@@ -151,6 +113,51 @@ public class TodoListFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        TodoLab todoLab = TodoLab.get(getActivity());
+        List<TodoItem> todoItems = todoLab.getItems();
+        listSize = todoItems.size();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
+        TodoListAdapter adapter = new TodoListAdapter(todoItems, getContext(), getView(), getActivity(), this);
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(adapter);
+        touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mTodoRecyclerView);
+    }
+
+    /*
+    * Sort tasks by their position as saved in the database and update the UI to reflect the current
+    * state of the db.
+    */
+    public void updateUI() {
+        TodoLab todoLab = TodoLab.get(getActivity());
+        List<TodoItem> todoItems = todoLab.getItems();
+        Collections.sort(todoItems, new TodoItem.PositionComparator());
+
+        TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
+        if (recyclerAdapter == null) {
+            mTodoRecyclerView.setAdapter(new TodoListAdapter(todoItems, getContext(), getView(), getActivity(), this));
+        } else {
+            recyclerAdapter.setTodoItems(todoItems);
+        }
+    }
+
+    /*
+    * Takes a list of TodoItems and deletes those items from the database.
+    */
     public void deleteSelected(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {
             TodoLab.get(getActivity()).deleteTodoItem(i.getID());

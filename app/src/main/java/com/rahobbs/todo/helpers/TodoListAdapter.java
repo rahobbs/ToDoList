@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rahobbs.todo.R;
+import com.rahobbs.todo.fragments.TodoListFragment;
 import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
 
 import java.util.Collections;
@@ -21,18 +22,20 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
     Context mContext;
     View mView;
     Activity mActivity;
+    TodoListFragment mFragment;
 
-    public TodoListAdapter(List<TodoItem> todoItems, Context context, View v, Activity activity) {
+    public TodoListAdapter(List<TodoItem> todoItems, Context context, View v, Activity activity, TodoListFragment fragment) {
         mTodoItems = todoItems;
         this.mContext = context;
         this.mView = v;
         this.mActivity = activity;
+        this.mFragment = fragment;
     }
 
     @Override
     public TodoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_todo, parent, false);
-        return new TodoHolder(view, parent.getContext(), mActivity);
+        return new TodoHolder(view, parent.getContext(), mActivity, mFragment);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
         mHolder.mHandle.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    touchHelper.startDrag(mHolder);
+                    mFragment.touchHelper.startDrag(mHolder);
                 }
                 return false;
             }
@@ -69,14 +72,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
         TodoItem item = mTodoItems.get(position);
         final TodoItem copyItem = item;
         TodoLab.get(mActivity).deleteTodoItem(item.getID());
-        updateUI();
+        mFragment.updateUI();
 
         Snackbar.make(mView, "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TodoLab.get(mActivity).addTodoItem(copyItem);
                 copyItem.setPosition(copyItem.getPosition());
-                updateUI();
+                mFragment.updateUI();
             }
         }).show();
     }
