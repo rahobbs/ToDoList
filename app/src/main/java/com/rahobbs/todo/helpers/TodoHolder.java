@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by rachael on 5/5/16.
+ * Class to define custom ViewHolder
  */
 public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView mTitleTextView;
@@ -101,7 +101,9 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         });
     }
 
-    // TODO: What is being updated, what does it mean for it to have completed?  This is completely unclear as to its intent, use, or effect.
+    /*
+    * Changes to state of the checkbox depending on whether the task has been completed.
+    */
     public void updateCompleted() {
         if (mTodo.isCompleted()) {
             checkItem();

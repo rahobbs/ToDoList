@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by rachael on 5/5/16.
+ * Custom RecyclerView.Adapter. Implements ItemTouchHelperAdapter to handle drag and swipe events.
  */
 public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements ItemTouchHelperAdapter {
     private List<TodoItem> mTodoItems;

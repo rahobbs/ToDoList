@@ -39,7 +39,7 @@ public class TodoListFragment extends Fragment {
     /*
      * Looks for "item deleted" result code from detail activity and displays undo snackbar
      * if item was deleted.
-     * */
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
@@ -134,7 +134,7 @@ public class TodoListFragment extends Fragment {
     /*
     * Updates the RecyclerView UI after data has changed. This includes sorting TodoItems by their
     * positions as specified in the database.
-    * */
+    */
     public void updateUI() {
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getItems();

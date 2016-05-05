@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rachael on 5/5/16.
+ * Customizations to ActionMode.Callback to handle the Context Action Menu for selecting and
+ * manipulating multiple tasks.
  */
-public class ActionModeCallback {
+public class ActionModeCallback extends ActionMode.Callback{
 
-    List<TodoItem> mSelectedItems = new ArrayList<TodoItem>();
+    List<TodoItem> mSelectedItems = new ArrayList<>();
     Boolean mMultiSelectMode;
 
     @Override
@@ -85,7 +86,7 @@ public class ActionModeCallback {
 
     /*
     * Takes a list of TodoItems and deletes those items from the database.
-    * */
+    */
     public void deleteItems(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {
             TodoLab.get(getActivity()).deleteTodoItem(i.getID());
