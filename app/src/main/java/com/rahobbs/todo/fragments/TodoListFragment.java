@@ -28,8 +28,6 @@ import com.rahobbs.todo.helpers.TodoListAdapter;
 import java.util.Collections;
 import java.util.List;
 
-//TODO: Reorder these classes to match the parent class
-
 /**
  * Fragment that contains the list of to-do items
  */
