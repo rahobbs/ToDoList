@@ -10,5 +10,10 @@
         android:id="@+id/menu_item_send_feedback"
         android:title="@string/send_feedback"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_item_view_archive"
+        android:title="View archive"
+        app:showAsAction="never"
+        />
 
 </menu>

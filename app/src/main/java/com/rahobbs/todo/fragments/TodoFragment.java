@@ -127,7 +127,7 @@ public class TodoFragment extends Fragment {
         mTitle = (EditText) v.findViewById(R.id.todo_title);
 
         if (mTodo.isCompleted()) {
-            mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
+            mTitle.setTextColor(getResources().getColor(R.color.light_grey));
         }
 
         mTitle.setFocusable(true);
@@ -169,7 +169,7 @@ public class TodoFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTodo.setCompleted(isChecked);
                 if (isChecked) {
-                    mTitle.setTextColor(getResources().getColor(R.color.inactiveText));
+                    mTitle.setTextColor(getResources().getColor(R.color.light_grey));
                 } else {
                     mTitle.setTextColor(getResources().getColor(R.color.darkFont));
                 }

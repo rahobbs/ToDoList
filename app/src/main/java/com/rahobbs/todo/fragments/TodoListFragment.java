@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rahobbs.todo.activities.ArchivedListActivity;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
 import com.rahobbs.todo.helpers.SharableList;
@@ -32,18 +33,19 @@ import java.util.List;
 /**
  * Fragment that contains the list of to-do items
  */
-public class TodoListFragment extends Fragment {
+public abstract class TodoListFragment extends Fragment {
 
     private RecyclerView mTodoRecyclerView;
     private int listSize;
     public ItemTouchHelper touchHelper;
+    public String mType = "todo_list";
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 final TodoItem item = (TodoItem) data.getSerializableExtra("item");
-                if(getView()!= null){
+                if (getView() != null) {
                     Snackbar.make(getView(), "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -107,6 +109,10 @@ public class TodoListFragment extends Fragment {
                 fb.sendFeedback(i);
                 startActivity(Intent.createChooser(i, "Send mail..."));
                 return true;
+            case R.id.menu_item_view_archive:
+                Intent intent = ArchivedListActivity.newIntent(getContext());
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -154,6 +160,10 @@ public class TodoListFragment extends Fragment {
         }
     }
 
+    public void setFragmentType(String type) {
+        mType = type;
+    }
+
     /*
     * Takes a list of TodoItems and deletes those items from the database.
     */
@@ -162,12 +172,24 @@ public class TodoListFragment extends Fragment {
             TodoLab.get(getActivity()).deleteTodoItem(i.getID());
         }
     }
+
     /*
     * Takes a list of TodoItems and sets them as archived.
     */
     public void archiveSelected(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {
             i.setArchived(true);
+            Log.v("Set archived", String.valueOf(i.isArchived()));
+            TodoLab.get(getActivity()).updateItem(i);
+        }
+    }
+
+    /*
+    * Takes a list of TodoItems and sets them as *not* archived.
+    */
+    public void unArchiveSelected(List<TodoItem> selectedItems) {
+        for (TodoItem i : selectedItems) {
+            i.setArchived(false);
             Log.v("Set archived", String.valueOf(i.isArchived()));
             TodoLab.get(getActivity()).updateItem(i);
         }

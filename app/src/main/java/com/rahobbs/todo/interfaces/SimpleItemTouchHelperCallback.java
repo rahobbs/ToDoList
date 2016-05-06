@@ -36,10 +36,10 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
-        if (viewHolder.getItemViewType() != target.getItemViewType()){
+        if (viewHolder.getItemViewType() != target.getItemViewType()) {
             return false;
         }
-        if (mFrom == null){
+        if (mFrom == null) {
             mFrom = viewHolder.getAdapterPosition();
         }
         mTo = target.getAdapterPosition();
@@ -49,7 +49,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
     }
 

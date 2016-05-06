@@ -96,6 +96,26 @@ public class TodoLab {
         return todoItems;
     }
 
+    public List<TodoItem> getArchivedItems() {
+        List<TodoItem> todoItems = new ArrayList<>();
+
+        TodoCursorWrapper cursor = queryTodoItems(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                TodoItem item = cursor.getTodoItem();
+                if (item.isArchived()) {
+                    todoItems.add(item);
+                }
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return todoItems;
+    }
+
     public TodoItem getItem(UUID id) {
         TodoCursorWrapper cursor = queryTodoItems(
                 TodoTable.Cols.UUID + " = ?",

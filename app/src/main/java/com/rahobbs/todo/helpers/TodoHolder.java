@@ -64,13 +64,13 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
         mListItem.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View arg0) {
-                if(!mMultiSelectMode){
+                if (!mMultiSelectMode) {
                     selectedItems.clear();
                 }
                 selectedItems.add(mTodo);
                 mMultiSelectMode = true;
                 mActionMode = mActivity.startActionMode(mActionModeCallback);
-                mListItem.setBackgroundColor(ContextCompat.getColor(mContext, R.color.done_task));
+                mListItem.setBackgroundColor(ContextCompat.getColor(mContext, R.color.dark_grey));
 
                 return true;    // <- set to true
             }
@@ -136,7 +136,7 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
                 }
             } else {
                 selectedItems.add(mTodo);
-                mListItem.setBackgroundColor(ContextCompat.getColor(mContext, (R.color.done_task)));
+                mListItem.setBackgroundColor(ContextCompat.getColor(mContext, (R.color.dark_grey)));
             }
         }
     }
@@ -145,10 +145,10 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
     * Update checkbox UI and make sure the item's isCompleted() is set correctly
     */
     private void checkItem() {
-        mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.inactiveText));
+        mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.light_grey));
         mDateTextView.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         mDateLabel.setPaintFlags(mDateTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.inactiveText));
+        mTitleTextView.setTextColor(ContextCompat.getColor(mContext, R.color.light_grey));
 
         if (!mTodo.isCompleted()) {
             mTodo.setCompleted(true);
@@ -176,7 +176,11 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
+            if (mFragment.mType.equals("task_list")) {
+                inflater.inflate(R.menu.context_menu, menu);
+            } else {
+                inflater.inflate(R.menu.archive_context_menu, menu);
+            }
             return true;
         }
 
@@ -188,6 +192,11 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.unarchive:
+                    mFragment.unArchiveSelected(selectedItems);
+                    mFragment.updateUI();
+                    mode.finish();
+                    return true;
                 case R.id.archive:
                     mFragment.archiveSelected(selectedItems);
                     mFragment.updateUI();
