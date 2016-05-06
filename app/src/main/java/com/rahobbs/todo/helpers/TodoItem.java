@@ -17,6 +17,8 @@ public class TodoItem implements Serializable {
     private String mParents;
     private String mChildren;
     private int mPosition;
+    private boolean mArchived;
+
 
     public TodoItem() {
         mID = UUID.randomUUID();
@@ -44,6 +46,14 @@ public class TodoItem implements Serializable {
     public void setCompleted(boolean completed) {
 
         this.completed = completed;
+    }
+
+    public boolean isArchived() {
+        return mArchived;
+    }
+
+    public void setArchived(boolean mArchived) {
+        this.mArchived = mArchived;
     }
 
     public Date getDate() {

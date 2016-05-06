@@ -44,7 +44,7 @@ public class TodoPagerActivity extends AppCompatActivity {
 
         UUID todoId = (UUID) getIntent().getSerializableExtra(EXTRA_TODO_ID);
 
-        mItemList = TodoLab.get(this).getItems();
+        mItemList = TodoLab.get(this).getAllItems();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

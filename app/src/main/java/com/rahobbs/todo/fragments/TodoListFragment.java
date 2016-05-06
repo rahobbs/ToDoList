@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -96,7 +97,7 @@ public class TodoListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share_list:
-                List<TodoItem> list = TodoLab.get(getActivity()).getItems();
+                List<TodoItem> list = TodoLab.get(getActivity()).getAllItems();
                 SharableList sl = new SharableList();
                 startActivity(Intent.createChooser(sl.makeSharable(list), "Send list..."));
                 return true;
@@ -124,7 +125,7 @@ public class TodoListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
+        List<TodoItem> todoItems = todoLab.getUnarchivedItems();
         listSize = todoItems.size();
         Collections.sort(todoItems, new TodoItem.PositionComparator());
         TodoListAdapter adapter = new TodoListAdapter(todoItems, getContext(), getView(), getActivity(), this);
@@ -142,7 +143,7 @@ public class TodoListFragment extends Fragment {
     */
     public void updateUI() {
         TodoLab todoLab = TodoLab.get(getActivity());
-        List<TodoItem> todoItems = todoLab.getItems();
+        List<TodoItem> todoItems = todoLab.getUnarchivedItems();
         Collections.sort(todoItems, new TodoItem.PositionComparator());
 
         TodoListAdapter recyclerAdapter = (TodoListAdapter) mTodoRecyclerView.getAdapter();
@@ -159,6 +160,16 @@ public class TodoListFragment extends Fragment {
     public void deleteSelected(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {
             TodoLab.get(getActivity()).deleteTodoItem(i.getID());
+        }
+    }
+    /*
+    * Takes a list of TodoItems and sets them as archived.
+    */
+    public void archiveSelected(List<TodoItem> selectedItems) {
+        for (TodoItem i : selectedItems) {
+            i.setArchived(true);
+            Log.v("Set archived", String.valueOf(i.isArchived()));
+            TodoLab.get(getActivity()).updateItem(i);
         }
     }
 }

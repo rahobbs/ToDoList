@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/archive"
+        android:title="Archive Items"
+        android:icon="@drawable/ic_archive_white_24px"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/multi_delete"
         android:title="Delete Items"
         android:icon="@drawable/ic_menu_delete"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/close_menu"
         android:title="Close"
         android:icon="@drawable/ic_close_menu"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -188,6 +188,11 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.archive:
+                    mFragment.archiveSelected(selectedItems);
+                    mFragment.updateUI();
+                    mode.finish();
+                    return true;
                 case R.id.multi_delete:
                     final List<TodoItem> copySelected = selectedItems;
                     mFragment.deleteSelected(selectedItems);
