@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,13 +42,11 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public ActionMode mActionMode;
 
     private TodoItem mTodo;
-    private Boolean mMultiSelectMode = false;
-    private List<TodoItem> selectedItems = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
     private TodoListFragment mFragment;
 
-    public TodoHolder(final View itemView, Context context, Activity activity, TodoListFragment fragment) {
+    public TodoHolder(final View itemView, Context context, Activity activity, final TodoListFragment fragment) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.mContext = context;
@@ -64,14 +63,10 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
         mListItem.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View arg0) {
-                if (!mMultiSelectMode) {
-                    selectedItems.clear();
-                }
-                selectedItems.add(mTodo);
-                mMultiSelectMode = true;
+                mFragment.mSelectedItems.add(mTodo);
+                mFragment.setmMultiSelectMode(true);
                 mActionMode = mActivity.startActionMode(mActionModeCallback);
                 mListItem.setBackgroundColor(ContextCompat.getColor(mContext, R.color.dark_grey));
-
                 return true;    // <- set to true
             }
         });
@@ -123,19 +118,18 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (!mMultiSelectMode) {
+        if (!mFragment.mMultiSelectMode) {
             Intent intent = TodoPagerActivity.newIntent(mActivity, mTodo.getID());
             mActivity.startActivityForResult(intent, 1);
-        }
-        if (mMultiSelectMode) {
-            if (selectedItems.contains(mTodo)) {
-                selectedItems.remove(mTodo);
+        } else {
+            if (mFragment.mSelectedItems.contains(mTodo)) {
+                mFragment.mSelectedItems.remove(mTodo);
                 mListItem.setBackgroundColor(ContextCompat.getColor(mContext, (R.color.default_background_light)));
-                if (selectedItems.isEmpty() && mActionMode != null) {
+                if (mFragment.mSelectedItems.isEmpty() && mActionMode != null) {
                     mActionMode.finish();
                 }
             } else {
-                selectedItems.add(mTodo);
+                mFragment.mSelectedItems.add(mTodo);
                 mListItem.setBackgroundColor(ContextCompat.getColor(mContext, (R.color.dark_grey)));
             }
         }
@@ -193,21 +187,22 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.unarchive:
-                    mFragment.unArchiveSelected(selectedItems);
+                    mFragment.unArchiveSelected(mFragment.mSelectedItems);
                     mFragment.updateUI();
                     mode.finish();
                     return true;
                 case R.id.archive:
-                    mFragment.archiveSelected(selectedItems);
+                    mFragment.archiveSelected(mFragment.mSelectedItems);
                     mFragment.updateUI();
                     mode.finish();
                     return true;
                 case R.id.multi_delete:
-                    final List<TodoItem> copySelected = selectedItems;
-                    mFragment.deleteSelected(selectedItems);
+                    final List<TodoItem> copySelected = mFragment.mSelectedItems;
+                    Log.v("Selected Items: ", mFragment.mSelectedItems.toString());
+                    mFragment.deleteSelected(mFragment.mSelectedItems);
                     mFragment.updateUI();
 
-                    Snackbar.make(itemView, "Deleting " + selectedItems.size() + " items",
+                    Snackbar.make(itemView, "Deleting " + mFragment.mSelectedItems.size() + " items",
                             Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -215,7 +210,7 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
                                 TodoLab.get(mActivity).addTodoItem(i);
                                 i.setPosition(i.getPosition());
                             }
-                            selectedItems.clear();
+                            mFragment.mSelectedItems.clear();
                             mFragment.updateUI();
                         }
                     }).show();
@@ -225,7 +220,7 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
                 case R.id.close_menu:
                     mFragment.updateUI();
                     mode.finish();
-                    selectedItems.clear();
+                    mFragment.mSelectedItems.clear();
                     return true;
                 default:
                     return false;
@@ -234,7 +229,7 @@ public class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mMultiSelectMode = false;
+            mFragment.setmMultiSelectMode(false);
             mFragment.updateUI();
         }
     };

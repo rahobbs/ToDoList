@@ -14,6 +14,7 @@ import com.rahobbs.todo.R;
 import com.rahobbs.todo.fragments.TodoListFragment;
 import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,20 +69,33 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoHolder> implements
 
     @Override
     public void onItemDismiss(int position) {
-
         TodoItem item = mTodoItems.get(position);
+        final List<TodoItem> itemsList = new ArrayList<>();
         final TodoItem copyItem = item;
-        TodoLab.get(mActivity).deleteTodoItem(item.getID());
-        mFragment.updateUI();
+        itemsList.add(item);
 
-        Snackbar.make(mView, "Item Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TodoLab.get(mActivity).addTodoItem(copyItem);
-                copyItem.setPosition(copyItem.getPosition());
-                mFragment.updateUI();
-            }
-        }).show();
+        if (mFragment.mType.equals("task_list")) {
+            mFragment.archiveSelected(itemsList);
+            mFragment.updateUI();
+            Snackbar.make(mView, "Task Archived", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mFragment.unArchiveSelected(itemsList);
+                    mFragment.updateUI();
+                }
+            }).show();
+        } else {
+            mFragment.deleteSelected(itemsList);
+            mFragment.updateUI();
+            Snackbar.make(mView, "Task Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodoLab.get(mActivity).addTodoItem(copyItem);
+                    copyItem.setPosition(copyItem.getPosition());
+                    mFragment.updateUI();
+                }
+            }).show();
+        }
     }
 
     @Override

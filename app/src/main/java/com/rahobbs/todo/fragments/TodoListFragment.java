@@ -27,6 +27,7 @@ import com.rahobbs.todo.helpers.TodoLab;
 import com.rahobbs.todo.activities.TodoPagerActivity;
 import com.rahobbs.todo.helpers.TodoListAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +40,8 @@ public abstract class TodoListFragment extends Fragment {
     private int listSize;
     public ItemTouchHelper touchHelper;
     public String mType = "todo_list";
+    public boolean mMultiSelectMode;
+    public List<TodoItem> mSelectedItems = new ArrayList<>();
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -158,6 +161,10 @@ public abstract class TodoListFragment extends Fragment {
         } else {
             recyclerAdapter.setTodoItems(todoItems);
         }
+    }
+
+    public void setmMultiSelectMode(boolean mode) {
+        mMultiSelectMode = mode;
     }
 
     public void setFragmentType(String type) {

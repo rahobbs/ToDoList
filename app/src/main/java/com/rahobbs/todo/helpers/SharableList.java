@@ -18,7 +18,7 @@ public class SharableList {
         Intent listIntent = new Intent(Intent.ACTION_SEND);
         String textToSend = "";
         String bulletChar;
-        //TODO Make bullet chars more comparable in size
+
         for (TodoItem i : itemsList) {
             if (i.isCompleted()) {
                 bulletChar = "\u2713";

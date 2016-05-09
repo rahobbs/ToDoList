@@ -20,8 +20,6 @@ import java.util.List;
  */
 public class TasksListFragment extends TodoListFragment {
 
-    private RecyclerView mTodoRecyclerView;
-    private int listSize;
     public ItemTouchHelper touchHelper;
     public String type = "task_list";
 
@@ -33,7 +31,6 @@ public class TasksListFragment extends TodoListFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         TodoLab todoLab = TodoLab.get(getActivity());
         List<TodoItem> todoItems = todoLab.getUnarchivedItems();
-        listSize = todoItems.size();
         Collections.sort(todoItems, new TodoItem.PositionComparator());
         TodoListAdapter adapter = new TodoListAdapter(todoItems, getContext(), getView(), getActivity(), this);
         recyclerView.setAdapter(adapter);
@@ -43,6 +40,6 @@ public class TasksListFragment extends TodoListFragment {
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(adapter);
         touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mTodoRecyclerView);
+
     }
 }
