@@ -52,13 +52,15 @@ public abstract class TodoListFragment extends Fragment {
     private RecyclerView mTodoRecyclerView;
     public ItemTouchHelper touchHelper;
     private int listSize;
+    public int context_menu = R.menu.context_menu;
+
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
+            inflater.inflate(context_menu, menu);
             return true;
         }
 
@@ -92,6 +94,20 @@ public abstract class TodoListFragment extends Fragment {
                     }).show();
                     updateUI();
                     mode.finish();
+                    return true;
+                case R.id.archive:
+                    for (TodoItem i : selectedItems){
+                        i.setArchived(true);
+                        TodoLab.get(getActivity()).updateItem(i);
+                        updateUI();
+                    }
+                    return true;
+                case R.id.unarchive:
+                    for (TodoItem j : selectedItems){
+                        j.setArchived(false);
+                        TodoLab.get(getActivity()).updateItem(j);
+                        updateUI();
+                    }
                     return true;
                 case R.id.close_menu:
                     updateUI();
@@ -197,35 +213,7 @@ public abstract class TodoListFragment extends Fragment {
         updateUI();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.fragment_todo_list, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.share_list:
-                List<TodoItem> list = TodoLab.get(getActivity()).getUnarchivedItems();
-                SharableList sl = new SharableList();
-                startActivity(Intent.createChooser(sl.makeSharable(list), "Send list..."));
-                return true;
-            case R.id.menu_item_send_feedback:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                Feedback fb = new Feedback();
-                fb.sendFeedback(i);
-                startActivity(Intent.createChooser(i, "Send mail..."));
-                return true;
-            case R.id.menu_item_view_archive:
-                Intent intent = new Intent(getContext(), ArchivedListActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     public void deleteSelected(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {

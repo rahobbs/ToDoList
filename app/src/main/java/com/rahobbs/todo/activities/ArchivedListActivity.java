@@ -16,7 +16,8 @@ public class ArchivedListActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         ActionBar bar = getSupportActionBar();
         bar.setTitle("Archived Tasks");
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#727272")));
+        getWindow().setStatusBarColor(Color.parseColor("#424242"));
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#616161")));
         return new ArchivedListFragment();
     }
 }
