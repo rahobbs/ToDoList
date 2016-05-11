@@ -18,12 +18,11 @@ public class SharableList {
         Intent listIntent = new Intent(Intent.ACTION_SEND);
         String textToSend = "";
         String bulletChar;
-
         for (TodoItem i : itemsList) {
             if (i.isCompleted()) {
-                bulletChar = "\u2713";
+                bulletChar = "\u2611";
             } else {
-                bulletChar = "\u2022";
+                bulletChar = "\u2610";
             }
             textToSend = textToSend + bulletChar + " " + i.getTitle() + "\n";
         }
