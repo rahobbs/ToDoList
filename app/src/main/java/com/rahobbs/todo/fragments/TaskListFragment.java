@@ -15,7 +15,7 @@ import com.rahobbs.todo.helpers.TodoLab;
 import java.util.List;
 
 /**
- * Created by rachael on 5/11/16.
+ * Fragment to hold list of active (non-archived) tasks
  */
 public class TaskListFragment extends TodoListFragment {
 

@@ -1,7 +1,6 @@
 package com.rahobbs.todo.helpers;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.rahobbs.todo.BuildConfig;
 

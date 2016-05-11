@@ -46,12 +46,11 @@ public abstract class TodoListFragment extends Fragment {
 
     public List<TodoItem> selectedItems = new ArrayList<>();
     public Boolean multiSelectMode = false;
-    private RecyclerView mTodoRecyclerView;
     public ItemTouchHelper touchHelper;
-    private int listSize;
     public String fragType = "todo_list_fragment";
     public int context_menu = R.menu.context_menu;
-
+    private RecyclerView mTodoRecyclerView;
+    private int listSize;
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         // Called when the action mode is created; startActionMode() was called
         @Override

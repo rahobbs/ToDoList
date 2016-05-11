@@ -19,11 +19,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
+import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.helpers.TodoLab;
 
@@ -39,10 +38,9 @@ public class TodoFragment extends Fragment {
 
     private static final String ARG_TODO_ID = "todoId";
     private static final String ARG_WAS_DELETED = "deleted";
-    private static boolean wasDeleted = false;
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
-
+    private static boolean wasDeleted = false;
     private TodoItem mTodo;
     private EditText mTitle;
     private TextView mDueDateTextField;

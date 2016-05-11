@@ -6,4 +6,11 @@
     <string name="delete_todo">Delete Item</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="due_date_label">Due Date: </string>
+    <string name="archive_tasks">Archive Tasks</string>
+    <string name="delete_tasks">Delete Tasks</string>
+    <string name="unarchive_tasks">Un-archive Tasks</string>
+    <string name="share_list">Share List</string>
+    <string name="close_menu">Close Menu</string>
+    <string name="view_archive">View Archive</string>
+    <string name="archived_tasks">Archived Tasks</string>
 </resources>

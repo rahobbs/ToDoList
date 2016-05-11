@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by rachael on 5/11/16.
+ * Fragment that holds a list of archived items
  */
 public class ArchivedListFragment extends TodoListFragment {
 

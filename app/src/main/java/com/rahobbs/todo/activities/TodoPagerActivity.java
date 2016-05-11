@@ -25,7 +25,6 @@ public class TodoPagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_TODO_ID = "com.rahobbs.todo.todo_id";
 
-    private ViewPager mViewPager;
     private List<TodoItem> mItemList;
 
     public static Intent newIntent(Context packageContext, UUID todoId) {
@@ -39,7 +38,7 @@ public class TodoPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_pager);
 
-        mViewPager = (ViewPager) findViewById(R.id.activity_todo_pager_view_pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.activity_todo_pager_view_pager);
 
         UUID todoId = (UUID) getIntent().getSerializableExtra(EXTRA_TODO_ID);
 

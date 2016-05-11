@@ -3,8 +3,8 @@ package com.rahobbs.todo.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.database.TodoSchema.TodoTable;
+import com.rahobbs.todo.helpers.TodoItem;
 
 import java.util.Date;
 import java.util.UUID;

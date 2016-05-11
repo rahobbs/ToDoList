@@ -8,7 +8,7 @@ import android.support.v7.app.ActionBar;
 import com.rahobbs.todo.fragments.ArchivedListFragment;
 
 /**
- * Created by rachael on 5/11/16.
+ * Activity to host archived list fragment
  */
 public class ArchivedListActivity extends SingleFragmentActivity {
 

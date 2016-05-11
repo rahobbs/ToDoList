@@ -4,18 +4,18 @@
 
     <item
         android:id="@+id/archive"
-        android:title="Archive Items"
+        android:title="@string/archive_tasks"
         android:icon="@drawable/ic_archive_white_24px"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/multi_delete"
-        android:title="Delete Items"
+        android:title="@string/delete_tasks"
         android:icon="@drawable/ic_menu_delete"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/close_menu"
-        android:title="Close"
+        android:title="@string/close_menu"
         android:icon="@drawable/ic_close_menu"
         app:showAsAction="always"/>
 </menu>

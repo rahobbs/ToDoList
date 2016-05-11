@@ -89,17 +89,10 @@ public class TodoItem implements Serializable {
         mDetails = details;
     }
 
-    public String getParents() {
-        return mParents;
-    }
-
     public void setParents(String parents) {
         mParents = parents;
     }
 
-    public String getChildren() {
-        return mChildren;
-    }
 
     public void setChildren(String children) {
         mChildren = children;
