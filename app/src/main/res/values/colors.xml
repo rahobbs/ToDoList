@@ -5,8 +5,9 @@
     <color name="colorAccent">#00BCD4</color>
     <color name="accentLight">#00BCD4</color>
     <color name="darkFont">#212121</color>
-    <color name="inactiveText">#727272</color>
-    <color name="done_task">#6ab6b6b6</color>
+    <color name="light_grey">#727272</color>
+    <color name="dark_grey">#6ab6b6b6</color>
+    <color name="blue_grey">#607d8b</color>
     <color name="white">#ffffff</color>
     <color name="default_background_light">#fff3f3f3</color>
 </resources>

@@ -42,6 +42,7 @@ public class TodoLab {
         values.put(TodoTable.Cols.COMPLETED, todoItem.isCompleted() ? 1 : 0);
         values.put(TodoTable.Cols.DETAILS, todoItem.getDetails());
         values.put(TodoTable.Cols.POSITION, todoItem.getPosition());
+        values.put(TodoTable.Cols.ARCHIVED, todoItem.isArchived() ? 1 : 0);
 
         return values;
     }
@@ -58,7 +59,7 @@ public class TodoLab {
         mDatabase.delete(TodoTable.NAME, TodoTable.Cols.UUID + " = ?", new String[]{uuidString});
     }
 
-    public List<TodoItem> getItems() {
+    public List<TodoItem> getAllItems() {
         List<TodoItem> todoItems = new ArrayList<>();
 
         TodoCursorWrapper cursor = queryTodoItems(null, null);
@@ -67,6 +68,46 @@ public class TodoLab {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 todoItems.add(cursor.getTodoItem());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return todoItems;
+    }
+
+    public List<TodoItem> getUnarchivedItems() {
+        List<TodoItem> todoItems = new ArrayList<>();
+
+        TodoCursorWrapper cursor = queryTodoItems(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                TodoItem item = cursor.getTodoItem();
+                if (!item.isArchived()) {
+                    todoItems.add(item);
+                }
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return todoItems;
+    }
+
+    public List<TodoItem> getArchivedItems() {
+        List<TodoItem> todoItems = new ArrayList<>();
+
+        TodoCursorWrapper cursor = queryTodoItems(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                TodoItem item = cursor.getTodoItem();
+                if (item.isArchived()) {
+                    todoItems.add(item);
+                }
                 cursor.moveToNext();
             }
         } finally {

@@ -27,7 +27,6 @@ public class TodoPagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<TodoItem> mItemList;
-    private boolean wasDeleted;
 
     public static Intent newIntent(Context packageContext, UUID todoId) {
         Intent intent = new Intent(packageContext, TodoPagerActivity.class);
@@ -44,7 +43,7 @@ public class TodoPagerActivity extends AppCompatActivity {
 
         UUID todoId = (UUID) getIntent().getSerializableExtra(EXTRA_TODO_ID);
 
-        mItemList = TodoLab.get(this).getItems();
+        mItemList = TodoLab.get(this).getAllItems();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

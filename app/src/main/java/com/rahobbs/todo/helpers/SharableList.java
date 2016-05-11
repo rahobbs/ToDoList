@@ -10,29 +10,28 @@ import java.util.List;
  */
 public class SharableList {
 
-    public SharableList(){
+    public SharableList() {
 
     }
 
-    public Intent makeSharable(List<TodoItem> itemsList){
-            Intent listIntent = new Intent(Intent.ACTION_SEND);
-            String textToSend = "";
-            String bulletChar;
-            //TODO Make bullet chars more comparable in size
-            for (TodoItem i : itemsList){
-                if(i.isCompleted()){
-                    bulletChar = "\u2611";
-                } else {
-                    bulletChar = "\u2610";
-                }
-                textToSend = textToSend + bulletChar + " " + i.getTitle() + "\n";
+    public Intent makeSharable(List<TodoItem> itemsList) {
+        Intent listIntent = new Intent(Intent.ACTION_SEND);
+        String textToSend = "";
+        String bulletChar;
+        for (TodoItem i : itemsList) {
+            if (i.isCompleted()) {
+                bulletChar = "\u2611";
+            } else {
+                bulletChar = "\u2610";
             }
-            textToSend = textToSend.trim();
+            textToSend = textToSend + bulletChar + " " + i.getTitle() + "\n";
+        }
+        textToSend = textToSend.trim();
 
 
-            listIntent.setType("text/plain");
-            listIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+        listIntent.setType("text/plain");
+        listIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
 
-            return listIntent;
+        return listIntent;
     }
 }

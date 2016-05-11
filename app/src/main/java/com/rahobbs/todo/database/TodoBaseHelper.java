@@ -3,7 +3,6 @@ package com.rahobbs.todo.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.rahobbs.todo.database.TodoSchema.TodoTable;
 
@@ -11,7 +10,7 @@ import com.rahobbs.todo.database.TodoSchema.TodoTable;
  * Helper class to manage database creation and version management
  */
 public class TodoBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 4;
+    private static final int VERSION = 5;
     private static final String DATABASE_NAME = "todoBase.db";
 
     public TodoBaseHelper(Context context) {
@@ -24,6 +23,7 @@ public class TodoBaseHelper extends SQLiteOpenHelper {
                 TodoTable.Cols.TITLE + ", " +
                 TodoTable.Cols.DATE + ", " +
                 TodoTable.Cols.COMPLETED + "," +
+                TodoTable.Cols.ARCHIVED + "," +
                 TodoTable.Cols.DETAILS + "," +
                 TodoTable.Cols.PARENTS + "," +
                 TodoTable.Cols.CHILDREN + "," +
@@ -38,53 +38,97 @@ public class TodoBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String addDetails = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN DETAILS TEXT";
-        String addParents = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN PARENTS TEXT";
-        String addChildren = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN CHILDREN TEXT";
-        String addPosition = "ALTER TABLE " + TodoTable.NAME + " ADD COLUMN POSITION TEXT";
+        if (oldVersion < 4) {
+            //create temp. table to hold data
+            db.execSQL("create table todoBackup (" +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + "," +
+                    TodoTable.Cols.DETAILS + "," +
+                    TodoTable.Cols.PARENTS + "," +
+                    TodoTable.Cols.CHILDREN + ")"
+            );
 
-        //create temp. table to hold data
-        db.execSQL("create table todoBackup (" +
-                TodoTable.Cols.UUID + ", " +
-                TodoTable.Cols.TITLE + ", " +
-                TodoTable.Cols.DATE + ", " +
-                TodoTable.Cols.COMPLETED + "," +
-                TodoTable.Cols.DETAILS + "," +
-                TodoTable.Cols.PARENTS + "," +
-                TodoTable.Cols.CHILDREN + ")"
-        );
+            //insert data from old table into temp table
 
-        //insert data from old table into temp table
+            db.execSQL("INSERT INTO todoBackup SELECT " +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + ", " +
+                    TodoTable.Cols.DETAILS + ", " +
+                    TodoTable.Cols.PARENTS + ", " +
+                    TodoTable.Cols.CHILDREN + " from " + TodoTable.NAME
+            );
 
-        db.execSQL("INSERT INTO todoBackup SELECT " +
-                TodoTable.Cols.UUID + ", " +
-                TodoTable.Cols.TITLE + ", " +
-                TodoTable.Cols.DATE + ", " +
-                TodoTable.Cols.COMPLETED + ", " +
-                TodoTable.Cols.DETAILS + ", " +
-                TodoTable.Cols.PARENTS + ", " +
-                TodoTable.Cols.CHILDREN + " from " + TodoTable.NAME
-        );
+            //drop the old table
+            db.execSQL("DROP TABLE " + TodoTable.NAME);
 
-        //drop the old table
-        db.execSQL("DROP TABLE " + TodoTable.NAME);
+            //recreate the up-to-date table
+            createCurrentTable(db);
 
-        //recreate the up-to-date table
-        createCurrentTable(db);
+            //fill it from backup table
+            db.execSQL("INSERT INTO " + TodoTable.NAME + " SELECT " +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + "," +
+                    TodoTable.Cols.DETAILS + ", " +
+                    TodoTable.Cols.PARENTS + ", " +
+                    TodoTable.Cols.CHILDREN + ", null from todoBackup"
+            );
 
-        //fill it from backup table
-        db.execSQL("INSERT INTO " + TodoTable.NAME + " SELECT " +
-                TodoTable.Cols.UUID + ", " +
-                TodoTable.Cols.TITLE + ", " +
-                TodoTable.Cols.DATE + ", " +
-                TodoTable.Cols.COMPLETED + "," +
-                TodoTable.Cols.DETAILS + ", " +
-                TodoTable.Cols.PARENTS + ", " +
-                TodoTable.Cols.CHILDREN + ", null from todoBackup"
-        );
+            //then drop the temporary table
+            db.execSQL("DROP TABLE todoBackup");
+        }
+        if (oldVersion < 5) {
+            //create temp. table to hold data
+            db.execSQL("create table todoBackup (" +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + "," +
+                    TodoTable.Cols.DETAILS + "," +
+                    TodoTable.Cols.PARENTS + "," +
+                    TodoTable.Cols.CHILDREN + "," +
+                    TodoTable.Cols.POSITION + ")"
+            );
 
-        //then drop the temporary table
-        db.execSQL("DROP TABLE todoBackup");
+            //insert data from old table into temp table
+
+            db.execSQL("INSERT INTO todoBackup SELECT " +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + ", " +
+                    TodoTable.Cols.DETAILS + ", " +
+                    TodoTable.Cols.PARENTS + ", " +
+                    TodoTable.Cols.CHILDREN + "," +
+                    TodoTable.Cols.POSITION + " from " + TodoTable.NAME
+            );
+
+            //drop the old table
+            db.execSQL("DROP TABLE " + TodoTable.NAME);
+
+            //recreate the up-to-date table
+            createCurrentTable(db);
+
+            //fill it from backup table
+            db.execSQL("INSERT INTO " + TodoTable.NAME + " SELECT " +
+                    TodoTable.Cols.UUID + ", " +
+                    TodoTable.Cols.TITLE + ", " +
+                    TodoTable.Cols.DATE + ", " +
+                    TodoTable.Cols.COMPLETED + "," +
+                    TodoTable.Cols.DETAILS + ", " +
+                    TodoTable.Cols.PARENTS + ", " +
+                    TodoTable.Cols.CHILDREN + "," +
+                    TodoTable.Cols.POSITION + ", null from todoBackup"
+            );
+
+            //then drop the temporary table
+            db.execSQL("DROP TABLE todoBackup");
+        }
     }
 
 }

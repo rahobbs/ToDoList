@@ -60,7 +60,7 @@
         android:paddingEnd="0dp"
         android:paddingRight="0dp"
         android:text="@string/due_date_label"
-        android:textColor="@color/inactiveText"
+        android:textColor="@color/light_grey"
         android:textSize="12sp"/>
 
     <TextView
@@ -72,7 +72,7 @@
         android:layout_toRightOf="@+id/due_date_label"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:textColor="@color/inactiveText"
+        android:textColor="@color/light_grey"
         android:textSize="12sp"
         tools:text="Thu 18 Feb 2016"/>
 

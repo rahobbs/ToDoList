@@ -22,6 +22,7 @@ public class TodoCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(TodoTable.Cols.TITLE));
         long date = getLong(getColumnIndex(TodoTable.Cols.DATE));
         int isCompleted = getInt(getColumnIndex(TodoTable.Cols.COMPLETED));
+        int isArchived = getInt(getColumnIndex(TodoTable.Cols.ARCHIVED));
         String details = getString(getColumnIndex(TodoTable.Cols.DETAILS));
         String parents = getString(getColumnIndex(TodoTable.Cols.PARENTS));
         String children = getString(getColumnIndex(TodoTable.Cols.CHILDREN));
@@ -32,6 +33,7 @@ public class TodoCursorWrapper extends CursorWrapper {
         todoItem.setTitle(title);
         todoItem.setDate(new Date(date));
         todoItem.setCompleted(isCompleted != 0);
+        todoItem.setArchived(isArchived != 0);
         todoItem.setDetails(details);
         todoItem.setParents(parents);
         todoItem.setChildren(children);
