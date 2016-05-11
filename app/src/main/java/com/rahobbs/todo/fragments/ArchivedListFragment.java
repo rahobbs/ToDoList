@@ -3,7 +3,6 @@ package com.rahobbs.todo.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rahobbs.todo.R;
-import com.rahobbs.todo.activities.ArchivedListActivity;
 import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.helpers.SharableList;
 import com.rahobbs.todo.helpers.TodoItem;
@@ -38,6 +36,7 @@ public class ArchivedListFragment extends TodoListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context_menu = R.menu.archive_context_menu;
+        fragType = "archived_list_fragment";
         setHasOptionsMenu(true);
     }
 

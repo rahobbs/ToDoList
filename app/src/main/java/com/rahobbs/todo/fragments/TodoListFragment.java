@@ -26,15 +26,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.rahobbs.todo.activities.ArchivedListActivity;
-import com.rahobbs.todo.helpers.Feedback;
 import com.rahobbs.todo.R;
-import com.rahobbs.todo.helpers.SharableList;
-import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
+import com.rahobbs.todo.activities.TodoPagerActivity;
 import com.rahobbs.todo.helpers.TodoItem;
 import com.rahobbs.todo.helpers.TodoLab;
-import com.rahobbs.todo.activities.TodoPagerActivity;
 import com.rahobbs.todo.interfaces.ItemTouchHelperAdapter;
+import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +49,7 @@ public abstract class TodoListFragment extends Fragment {
     private RecyclerView mTodoRecyclerView;
     public ItemTouchHelper touchHelper;
     private int listSize;
+    public String fragType = "todo_list_fragment";
     public int context_menu = R.menu.context_menu;
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -96,14 +94,14 @@ public abstract class TodoListFragment extends Fragment {
                     mode.finish();
                     return true;
                 case R.id.archive:
-                    for (TodoItem i : selectedItems){
+                    for (TodoItem i : selectedItems) {
                         i.setArchived(true);
                         TodoLab.get(getActivity()).updateItem(i);
                         updateUI();
                     }
                     return true;
                 case R.id.unarchive:
-                    for (TodoItem j : selectedItems){
+                    for (TodoItem j : selectedItems) {
                         j.setArchived(false);
                         TodoLab.get(getActivity()).updateItem(j);
                         updateUI();
@@ -214,7 +212,6 @@ public abstract class TodoListFragment extends Fragment {
     }
 
 
-
     public void deleteSelected(List<TodoItem> selectedItems) {
         for (TodoItem i : selectedItems) {
             TodoLab.get(getActivity()).deleteTodoItem(i.getID());
@@ -246,7 +243,7 @@ public abstract class TodoListFragment extends Fragment {
 
             mListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View arg0) {
-                    if(!multiSelectMode){
+                    if (!multiSelectMode) {
                         selectedItems.clear();
                     }
                     selectedItems.add(mTodo);
@@ -386,18 +383,32 @@ public abstract class TodoListFragment extends Fragment {
         public void onItemDismiss(int position) {
 
             final TodoItem item = mTodoItems.get(position);
-            item.setArchived(true);
-            TodoLab.get(getActivity()).updateItem(item);
-            updateUI();
+            final TodoItem copyItem = item;
 
-            Snackbar.make(getView(), "Task Archived", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    item.setArchived(false);
-                    TodoLab.get(getActivity()).updateItem(item);
-                    updateUI();
-                }
-            }).show();
+            if (String.valueOf(fragType).equals("archived_list_fragment")) {
+                TodoLab.get(getActivity()).deleteTodoItem(item.getID());
+                Snackbar.make(getView(), "Task Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TodoLab.get(getActivity()).addTodoItem(copyItem);
+                        updateUI();
+                    }
+                }).show();
+                updateUI();
+            } else {
+                item.setArchived(true);
+                TodoLab.get(getActivity()).updateItem(item);
+                updateUI();
+
+                Snackbar.make(getView(), "Task Archived", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        item.setArchived(false);
+                        TodoLab.get(getActivity()).updateItem(item);
+                        updateUI();
+                    }
+                }).show();
+            }
         }
 
         @Override
