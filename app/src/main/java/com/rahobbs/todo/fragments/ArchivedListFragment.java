@@ -94,7 +94,7 @@ public class ArchivedListFragment extends TodoListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share_list:
-                List<TodoItem> list = TodoLab.get(getActivity()).getUnarchivedItems();
+                List<TodoItem> list = TodoLab.get(getActivity()).getArchivedItems();
                 SharableList sl = new SharableList();
                 startActivity(Intent.createChooser(sl.makeSharable(list), "Send list..."));
                 return true;
