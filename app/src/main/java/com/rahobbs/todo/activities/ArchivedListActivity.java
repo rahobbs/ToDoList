@@ -1,30 +1,22 @@
 package com.rahobbs.todo.activities;
 
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 
-import com.rahobbs.todo.R;
 import com.rahobbs.todo.fragments.ArchivedListFragment;
 
 /**
- * Activity that hosts the to-do list fragment
+ * Created by rachael on 5/11/16.
  */
 public class ArchivedListActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_grey)));
-        getSupportActionBar().setTitle("Archived Tasks");
-        getWindow().setStatusBarColor(getResources().getColor(R.color.darkFont));
+        ActionBar bar = getSupportActionBar();
+        bar.setTitle("Archived Tasks");
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#727272")));
         return new ArchivedListFragment();
     }
-
-
-    public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, ArchivedListActivity.class);
-        return intent;
-    }
-
 }

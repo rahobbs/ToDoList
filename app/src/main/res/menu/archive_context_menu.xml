@@ -12,9 +12,16 @@
         android:title="Delete Items"
         android:icon="@drawable/ic_menu_delete"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/share_list"
+        android:title="Share List"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_share_list"/>
+
     <item
         android:id="@+id/close_menu"
         android:title="Close"
         android:icon="@drawable/ic_close_menu"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>
