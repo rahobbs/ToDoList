@@ -36,6 +36,7 @@ import com.rahobbs.todo.interfaces.SimpleItemTouchHelperCallback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -233,10 +234,12 @@ public abstract class TodoListFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_todo_title_text_view);
-            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_todo_completed_check_box);
+            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_todo_date_text_view);
             mDateLabel = (TextView) itemView.findViewById(R.id.due_date_label);
+
             mListItem = (RelativeLayout) itemView.findViewById(R.id.list_item_todo);
+
             mHandle = (ImageView) itemView.findViewById(R.id.reorder_handle);
             mPosition = getAdapterPosition();
 
@@ -270,6 +273,11 @@ public abstract class TodoListFragment extends Fragment {
             }
 
             mDateTextView.setText(format.format(mTodo.getDate()));
+
+            if (mTodo.getDate().equals(new Date(0))){
+                mDateTextView.setVisibility(View.GONE);
+                mDateLabel.setVisibility(View.GONE);
+            }
 
             mCompletedCheckBox.setChecked(mTodo.isCompleted());
             mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

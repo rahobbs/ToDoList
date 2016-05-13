@@ -22,12 +22,12 @@ public class TodoItem implements Serializable {
 
     public TodoItem() {
         mID = UUID.randomUUID();
-        mDate = new Date();
+        mDate = new Date(0);
     }
 
     public TodoItem(UUID id) {
         mID = id;
-        mDate = new Date();
+        mDate = new Date(0);
     }
 
     public int getPosition() {
@@ -57,8 +57,11 @@ public class TodoItem implements Serializable {
     }
 
     public Date getDate() {
-
+        if (mDate != null){
         return mDate;
+        } else{
+            return null;
+        }
     }
 
     public void setDate(Date date) {

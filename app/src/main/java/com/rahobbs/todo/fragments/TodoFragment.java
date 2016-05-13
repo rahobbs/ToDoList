@@ -44,6 +44,7 @@ public class TodoFragment extends Fragment {
     private TodoItem mTodo;
     private EditText mTitle;
     private TextView mDueDateTextField;
+    private TextView mDueDateLabel;
     private CheckBox mCompletedCheckbox;
     private LinearLayout mDateComponents;
 
@@ -153,12 +154,19 @@ public class TodoFragment extends Fragment {
         updateDate();
 
         mDateComponents = (LinearLayout) v.findViewById(R.id.date_components);
+        mDueDateLabel = (TextView) v.findViewById(R.id.due_date_label);
         mDateComponents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchDatePicker();
             }
         });
+
+        if (mTodo.getDate().equals(new Date(0))){
+            mDueDateLabel.setText("Set Due Date");
+            mDueDateTextField.setVisibility(View.GONE);
+
+        }
 
         mCompletedCheckbox = (CheckBox) v.findViewById(R.id.todo_completed);
         mCompletedCheckbox.setChecked(mTodo.isCompleted());
@@ -188,7 +196,12 @@ public class TodoFragment extends Fragment {
 
     private void launchDatePicker() {
         FragmentManager fragmentManager = getFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(mTodo.getDate());
+        DatePickerFragment dialog;
+        if (mTodo.getDate().equals(new Date(0))){
+            dialog = DatePickerFragment.newInstance(new Date());
+        } else {
+            dialog = DatePickerFragment.newInstance(mTodo.getDate());
+        }
         dialog.setTargetFragment(TodoFragment.this, REQUEST_DATE);
         dialog.show(fragmentManager, DIALOG_DATE);
     }
@@ -202,6 +215,10 @@ public class TodoFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mTodo.setDate(date);
             updateDate();
+            if (!mTodo.getDate().equals(new Date(0))){
+                mDueDateLabel.setText(getResources().getString(R.string.due_date_label ));
+                mDueDateTextField.setVisibility(View.VISIBLE);
+            }
         }
     }
 
