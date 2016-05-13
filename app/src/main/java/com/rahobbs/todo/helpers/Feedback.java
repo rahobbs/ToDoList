@@ -13,7 +13,7 @@ public class Feedback {
     public Intent sendFeedback(Intent i) {
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@rahobbs.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "The Round File Customer Feedback, version " + BuildConfig.VERSION_NAME);
+        i.putExtra(Intent.EXTRA_SUBJECT, "eager customer feedback, version " + BuildConfig.VERSION_NAME);
 
         return i;
 
